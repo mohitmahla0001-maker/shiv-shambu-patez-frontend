@@ -11,6 +11,16 @@
 </head>
 <body>
 
+<script>
+    const adminPassword = "shivshambu123"; // Yahan apna password set kar
+    const enteredPassword = prompt("Enter Admin Password:");
+
+    if (enteredPassword !== adminPassword) {
+        alert("❌ Wrong Password! Access Denied.");
+        window.location.href = "index.html"; // Wapas home page pe bhej dega
+    }
+</script>
+
 <h1>📋 Shiv Shambu PATEZ Admin Panel</h1>
 
 <table>
