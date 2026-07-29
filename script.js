@@ -160,6 +160,12 @@ searchInput.addEventListener("keyup", function(){
 // ==========================
 
 const popup = document.getElementById("customerPopup");
+const paymentPopup = document.getElementById("paymentPopup");
+const UPI_ID = "7056468607@fam";
+
+let pendingOrderData = null;
+let pendingItemNames = "";
+let pendingTotalPrice = 0;
 
 document.querySelector(".checkout").addEventListener("click", () => {
 
@@ -172,14 +178,12 @@ document.querySelector(".checkout").addEventListener("click", () => {
 
 });
 
-document.getElementById("customerForm").addEventListener("submit", async (e) => {
+document.getElementById("customerForm").addEventListener("submit", (e) => {
 
     e.preventDefault();
 
     let name = document.getElementById("customerName").value;
     let phone = document.getElementById("customerPhone").value;
-    let email = document.getElementById("customerEmail").value;
-    let address = document.getElementById("customerAddress").value;
 
     if (phone.length != 10) {
         alert("Enter Valid Mobile Number");
@@ -189,7 +193,7 @@ document.getElementById("customerForm").addEventListener("submit", async (e) => 
     let itemNames = cart.map(item => `${item.name} x${item.quantity}`).join(", ");
     let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-    const orderData = {
+    pendingOrderData = {
         customerName: name,
         phone: phone,
         items: cart.map(item => ({
@@ -200,43 +204,62 @@ document.getElementById("customerForm").addEventListener("submit", async (e) => 
         totalAmount: totalPrice
     };
 
+    pendingItemNames = itemNames;
+    pendingTotalPrice = totalPrice;
+
+    // UPI payment link bana
+    const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv Shambu Patez&am=${totalPrice}&cu=INR`;
+
+    // QR code generate kar (free API use kar rahe hain)
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
+
+    document.getElementById("qrCodeImg").src = qrUrl;
+    document.getElementById("payAmountText").innerText = "Amount to Pay: ₹" + totalPrice;
+
+    popup.style.display = "none";
+    paymentPopup.style.display = "flex";
+
+});
+
+// "I Have Paid" button
+document.getElementById("paidBtn").addEventListener("click", async () => {
+
     try {
 
         const response = await fetch("https://shiv-shambu-patez-backend.onrender.com/api/orders", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(orderData)
-    }
-);
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(pendingOrderData)
+        });
 
         if (!response.ok) {
             throw new Error("Order failed to save");
         }
 
-        const savedOrder = await response.json();
-
-        popup.style.display = "none";
+        paymentPopup.style.display = "none";
 
         alert(
             "✅ Order Placed Successfully!\n\n" +
-            "Name : " + name +
-            "\nPhone : " + phone +
-            "\nItems : " + itemNames +
-            "\nTotal : ₹" + totalPrice
+            "Items : " + pendingItemNames +
+            "\nTotal : ₹" + pendingTotalPrice
         );
 
         cart = [];
         updateCart();
-
         document.getElementById("customerForm").reset();
 
     } catch (error) {
         alert("❌ Order place karne mein error aayi. Backend server chal raha hai check kar.");
         console.error(error);
     }
-/*  */
+
+});
+
+// Cancel button
+document.getElementById("cancelPayBtn").addEventListener("click", () => {
+    paymentPopup.style.display = "none";
 });
 // ==========================
 // START
