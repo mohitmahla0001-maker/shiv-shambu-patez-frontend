@@ -1,0 +1,245 @@
+// ==========================
+// CART DATA
+// ==========================
+
+let cart = [];
+
+// ==========================
+// ADD TO CART
+// ==========================
+
+function addToCart(name, price) {
+
+    let item = cart.find(product => product.name === name);
+
+    if (item) {
+
+        item.quantity++;
+
+    } else {
+
+        cart.push({
+            name: name,
+            price: price,
+            quantity: 1
+        });
+
+    }
+
+    updateCart();
+
+}
+
+// ==========================
+// UPDATE CART
+// ==========================
+
+function updateCart() {
+
+    const cartItems = document.getElementById("cart-items");
+    const totalPrice = document.getElementById("total-price");
+    const cartCount = document.getElementById("cart-count");
+
+    cartItems.innerHTML = "";
+
+    let total = 0;
+    let count = 0;
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML = "<p>No Item Added</p>";
+
+    }
+
+    cart.forEach((item, index) => {
+
+        total += item.price * item.quantity;
+
+        count += item.quantity;
+
+        cartItems.innerHTML += `
+
+        <div class="cart-item">
+
+            <div class="item-info">
+
+                <h4>${item.name}</h4>
+
+                <p>₹${item.price}</p>
+
+            </div>
+
+            <div class="qty">
+
+                <button onclick="decreaseItem(${index})">-</button>
+
+                <span>${item.quantity}</span>
+
+                <button onclick="increaseItem(${index})">+</button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    totalPrice.innerText = total;
+
+    cartCount.innerText = count;
+
+}
+
+// ==========================
+// INCREASE
+// ==========================
+
+function increaseItem(index){
+
+    cart[index].quantity++;
+
+    updateCart();
+
+}
+
+// ==========================
+// DECREASE
+// ==========================
+
+function decreaseItem(index){
+
+    if(cart[index].quantity > 1){
+
+        cart[index].quantity--;
+
+    }else{
+
+        cart.splice(index,1);
+
+    }
+
+    updateCart();
+
+}
+
+// ==========================
+// SEARCH
+// ==========================
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("keyup", function(){
+
+    let value = this.value.toLowerCase();
+
+    let cards = document.querySelectorAll(".food-card");
+
+    cards.forEach(card=>{
+
+        let name = card.querySelector("h3").innerText.toLowerCase();
+
+        if(name.includes(value)){
+
+            card.style.display="block";
+
+        }
+
+        else{
+
+            card.style.display="none";
+
+        }
+
+    });
+
+});
+
+// ==========================
+// CHECKOUT
+// ==========================
+
+const popup = document.getElementById("customerPopup");
+
+document.querySelector(".checkout").addEventListener("click", () => {
+
+    if (cart.length === 0) {
+        alert("Your Cart is Empty");
+        return;
+    }
+
+    popup.style.display = "flex";
+
+});
+
+document.getElementById("customerForm").addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    let name = document.getElementById("customerName").value;
+    let phone = document.getElementById("customerPhone").value;
+    let email = document.getElementById("customerEmail").value;
+    let address = document.getElementById("customerAddress").value;
+
+    if (phone.length != 10) {
+        alert("Enter Valid Mobile Number");
+        return;
+    }
+
+    let itemNames = cart.map(item => `${item.name} x${item.quantity}`).join(", ");
+    let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    const orderData = {
+        customerName: name,
+        phone: phone,
+        items: cart.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+        })),
+        totalAmount: totalPrice
+    };
+
+    try {
+
+        const response = await fetch("https://shiv-shambu-patez-backend.onrender.com/api/orders", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(orderData)
+    }
+);
+
+        if (!response.ok) {
+            throw new Error("Order failed to save");
+        }
+
+        const savedOrder = await response.json();
+
+        popup.style.display = "none";
+
+        alert(
+            "✅ Order Placed Successfully!\n\n" +
+            "Name : " + name +
+            "\nPhone : " + phone +
+            "\nItems : " + itemNames +
+            "\nTotal : ₹" + totalPrice
+        );
+
+        cart = [];
+        updateCart();
+
+        document.getElementById("customerForm").reset();
+
+    } catch (error) {
+        alert("❌ Order place karne mein error aayi. Backend server chal raha hai check kar.");
+        console.error(error);
+    }
+/*  */
+});
+// ==========================
+// START
+// ==========================
+
+updateCart();

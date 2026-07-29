@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shiv Shambu PATEZ</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!--================ NAVBAR ================-->
+
+<header>
+
+<nav class="navbar">
+
+<div class="logo">
+
+<i class="fa-solid fa-bowl-food"></i>
+
+<span>Shiv Shambu PATEZ</span>
+
+</div>
+
+<ul>
+
+<li><a href="#">Home</a></li>
+
+<li><a href="#menu">Menu</a></li>
+
+<li><a href="#">About</a></li>
+
+<li><a href="#">Contact</a></li>
+
+</ul>
+
+<div class="cart-btn">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+<span id="cart-count">0</span>
+
+</div>
+
+</nav>
+
+</header>
+
+<!--================ HERO ================-->
+
+<section class="hero">
+
+<div class="hero-left">
+
+<h1>Fresh & Delicious PATEZ</h1>
+
+<p>
+
+Taste That Everyone Loves ❤️
+
+Order Fresh PATEZ Online
+
+</p>
+
+<a href="#menu">
+
+<button>
+
+Order Now
+
+</button>
+
+</a>
+
+</div>
+
+<div class="hero-right">
+
+<img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800" alt="Food">
+
+</div>
+
+</section>
+
+<!--================ SEARCH ================-->
+
+<section class="search-section">
+
+<input
+
+type="text"
+
+placeholder="Search Your Favourite PATEZ..."
+
+id="searchInput"
+
+>
+
+</section>
+
+<!--================ MENU ================-->
+
+<section id="menu">
+
+<h2 class="title">
+
+Our Special Menu
+
+</h2>
+
+<div class="food-container" id="foodContainer">
+
+<!-- CARD 1 -->
+
+<div class="food-card">
+
+<img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=600">
+
+<h3>Simple PATEZ</h3>
+
+<p>Fresh Crispy Taste</p>
+
+<h4>₹15</h4>
+
+<button
+
+onclick="addToCart('Simple PATEZ',15)">
+
+Add To Cart
+
+</button>
+
+</div>
+
+<!-- CARD 2 -->
+
+<div class="food-card">
+
+<img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?w=600">
+
+<h3>Stuff PATEZ</h3>
+
+<p>Extra Stuffing</p>
+
+<h4>₹20</h4>
+
+<button
+
+onclick="addToCart('Stuff PATEZ',20)">
+
+Add To Cart
+
+</button>
+
+</div>
+
+<!-- CARD 3 -->
+
+<div class="food-card">
+
+<img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600">
+
+<h3>Large Stuff PATEZ</h3>
+
+<p>Large Size</p>
+
+<h4>₹30</h4>
+
+<button
+
+onclick="addToCart('Large Stuff PATEZ',30)">
+
+Add To Cart
+
+</button>
+
+</div>
+
+<!-- CARD 4 -->
+
+<div class="food-card">
+
+<img src="https://images.unsplash.com/photo-1550317138-10000687a72b?w=600">
+
+<h3>Paneer PATEZ</h3>
+
+<p>Cheesy Paneer</p>
+
+<h4>₹30</h4>
+
+<button
+
+onclick="addToCart('Paneer PATEZ',30)">
+
+Add To Cart
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!--================ CART ================-->
+
+<div class="cart">
+
+<h2>
+
+Your Cart
+
+</h2>
+
+<div id="cart-items">
+
+<p>
+
+No Item Added
+
+</p>
+
+</div>
+
+<div class="total">
+
+<h3>
+
+Total :
+
+₹<span id="total-price">
+
+0
+
+</span>
+
+</h3>
+
+</div>
+
+<button class="checkout">
+
+Checkout
+
+</button>
+
+</div>
+
+<!--================ FOOTER ================-->
+
+<footer>
+
+<h2>
+
+Shiv Shambu PATEZ
+
+</h2>
+
+<p>
+
+Made with ❤️
+
+</p>
+
+<div class="social">
+
+<i class="fab fa-facebook"></i>
+
+<i class="fab fa-instagram"></i>
+
+<i class="fab fa-whatsapp"></i>
+
+<i class="fab fa-youtube"></i>
+
+</div>
+
+</footer>
+
+<!-- ================= CUSTOMER DETAILS ================= -->
+
+<div class="customer-popup" id="customerPopup">
+
+    <div class="customer-box">
+
+        <h2>Customer Details</h2>
+
+        <form id="customerForm">
+
+            <input type="text"
+            id="customerName"
+            placeholder="Full Name"
+            required>
+
+            <input type="tel"
+            id="customerPhone"
+            placeholder="Mobile Number"
+            maxlength="10"
+            required>
+
+            <input type="email"
+            id="customerEmail"
+            placeholder="Email Address">
+
+            <textarea
+            id="customerAddress"
+            placeholder="Full Address"
+            rows="4"
+            required></textarea>
+
+            <button type="submit">
+                Continue To Payment
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- JavaScript -->
+<script src="script.js"></script>
+
+</body>
+</html>
+<div class="customer-popup" id="customerPopup">
+
+    <div class="customer-box">
+
+        <h2>Customer Details</h2>
+
+        <form id="customerForm">
+
+            <input type="text"
+            id="customerName"
+            placeholder="Full Name"
+            required>
+
+            <input type="tel"
+            id="customerPhone"
+            placeholder="Mobile Number"
+            maxlength="10"
+            required>
+
+            <input type="email"
+            id="customerEmail"
+            placeholder="Email Address">
+
+            <textarea
+            id="customerAddress"
+            placeholder="Full Address"
+            rows="4"
+            required></textarea>
+
+            <button type="submit">
+                Continue To Payment
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
