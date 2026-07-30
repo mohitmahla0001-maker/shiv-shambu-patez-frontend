@@ -548,3 +548,48 @@ cursor:pointer;
 background:#ff5200;
 
 }
+.contact-section {
+    padding: 50px 20px;
+    text-align: center;
+    background: #f9f9f9;
+}
+
+.contact-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.contact-card {
+    background: white;
+    padding: 25px 35px;
+    border-radius: 15px;
+    text-decoration: none;
+    color: #222;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: 0.3s;
+    min-width: 180px;
+}
+
+.contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.contact-card i {
+    font-size: 32px;
+    color: #ff6b35;
+    margin-bottom: 10px;
+}
+
+.contact-card h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.contact-card p {
+    font-size: 14px;
+    color: #666;
+}
