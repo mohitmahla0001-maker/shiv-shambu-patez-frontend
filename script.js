@@ -184,6 +184,8 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
 
     let name = document.getElementById("customerName").value;
     let phone = document.getElementById("customerPhone").value;
+    let email = document.getElementById("customerEmail").value;
+    let address = document.getElementById("customerAddress").value;
 
     if (phone.length != 10) {
         alert("Enter Valid Mobile Number");
@@ -196,6 +198,8 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
     pendingOrderData = {
         customerName: name,
         phone: phone,
+        email: email,
+        address: address,
         items: cart.map(item => ({
             name: item.name,
             quantity: item.quantity,
@@ -221,15 +225,102 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
 
 });
 
+// ==========================
+// LOADING UI (spinner + elapsed time + timeout messages)
+// ==========================
+
+// Inject spinner CSS once (no separate stylesheet edit needed)
+(function injectLoadingStyles() {
+    const style = document.createElement("style");
+    style.textContent = `
+        #loadingText {
+            display: none;
+            margin-top: 15px;
+            text-align: center;
+        }
+        #loadingText .spinner {
+            width: 34px;
+            height: 34px;
+            margin: 0 auto 10px;
+            border: 4px solid rgba(0,0,0,0.1);
+            border-top-color: #333;
+            border-radius: 50%;
+            animation: patez-spin 0.8s linear infinite;
+        }
+        #loadingText #loadingMessage {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 4px 0;
+        }
+        #loadingText #loadingTimer {
+            font-size: 12px;
+            opacity: 0.65;
+            margin: 0;
+        }
+        @keyframes patez-spin {
+            to { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+})();
+
+// Make sure #loadingText exists even if the HTML wasn't updated.
+// If it's missing, build it and drop it right before the paidBtn.
+function ensureLoadingTextElement() {
+
+    let loadingText = document.getElementById("loadingText");
+
+    if (loadingText) return loadingText;
+
+    const paidBtn = document.getElementById("paidBtn");
+
+    loadingText = document.createElement("div");
+    loadingText.id = "loadingText";
+    loadingText.innerHTML = `
+        <div class="spinner"></div>
+        <p id="loadingMessage">Processing your order...</p>
+        <p id="loadingTimer"></p>
+    `;
+
+    paidBtn.parentNode.insertBefore(loadingText, paidBtn);
+
+    return loadingText;
+
+}
+
 // "I Have Paid" button
 document.getElementById("paidBtn").addEventListener("click", async () => {
 
-    const loadingText = document.getElementById("loadingText");
+    const loadingText = ensureLoadingTextElement();
+    const loadingMessage = document.getElementById("loadingMessage");
+    const loadingTimer = document.getElementById("loadingTimer");
     const paidBtn = document.getElementById("paidBtn");
 
     loadingText.style.display = "block";
     paidBtn.disabled = true;
     paidBtn.innerText = "Processing...";
+
+    const startTime = Date.now();
+
+    // Update elapsed time + escalate the message the longer it takes
+    // (useful for free-tier backends like Render that "cold start")
+    const timerInterval = setInterval(() => {
+
+        const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+
+        loadingTimer.innerText = `${elapsedSec}s elapsed`;
+
+        if (elapsedSec < 5) {
+            loadingMessage.innerText = "Processing your order...";
+        } else if (elapsedSec < 15) {
+            loadingMessage.innerText = "Waking up the server, please wait...";
+        } else if (elapsedSec < 30) {
+            loadingMessage.innerText = "Almost there, server is starting up...";
+        } else {
+            loadingMessage.innerText = "Taking longer than usual, please don't close this tab...";
+        }
+
+    }, 1000);
 
     try {
 
@@ -277,6 +368,7 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
         alert("❌ Order place karne mein error aayi. Thoda wait karke phir try kar.");
         console.error(error);
     } finally {
+        clearInterval(timerInterval);
         loadingText.style.display = "none";
         paidBtn.disabled = false;
         paidBtn.innerText = "✅ I Have Paid";
