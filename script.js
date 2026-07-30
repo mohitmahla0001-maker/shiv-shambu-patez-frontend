@@ -224,26 +224,49 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
 // "I Have Paid" button
 document.getElementById("paidBtn").addEventListener("click", async () => {
 
+    const loadingText = document.getElementById("loadingText");
+    const paidBtn = document.getElementById("paidBtn");
+
+    loadingText.style.display = "block";
+    paidBtn.disabled = true;
+    paidBtn.innerText = "Processing...";
+
     try {
 
         const response = await fetch("https://shiv-shambu-patez-backend.onrender.com/api/orders", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(pendingOrderData)
         });
 
-        if (!response.ok) {
-            throw new Error("Order failed to save");
-        }
+        if (!response.ok) throw new Error("Order failed to save");
+
+        const savedOrder = await response.json();
+        const shortOrderId = savedOrder._id.slice(-6).toUpperCase();
 
         paymentPopup.style.display = "none";
 
+        // ===== WHATSAPP NOTIFICATION =====
+        const orderSummary = `🍽️ *New Order - Shiv Shambu PATEZ*\n\n` +
+            `Order ID: #${shortOrderId}\n` +
+            `Name: ${pendingOrderData.customerName}\n` +
+            `Phone: ${pendingOrderData.phone}\n` +
+            `Address: ${pendingOrderData.address}\n\n` +
+            `Items:\n${pendingItemNames}\n\n` +
+            `Total: ₹${pendingTotalPrice}\n` +
+            `Status: Payment Done ✅`;
+
+        const ownerWhatsappLink = `https://wa.me/917056468607?text=${encodeURIComponent(orderSummary)}`;
+        window.open(ownerWhatsappLink, "_blank");
+        // ===== END WHATSAPP =====
+
         alert(
             "✅ Order Placed Successfully!\n\n" +
-            "Items : " + pendingItemNames +
-            "\nTotal : ₹" + pendingTotalPrice
+            "Order ID: #" + shortOrderId +
+            "\nItems : " + pendingItemNames +
+            "\nTotal : ₹" + pendingTotalPrice +
+            "\n\nPlease save this Order ID for reference.\n\n" +
+            "A WhatsApp message has opened — please tap Send to notify us!"
         );
 
         cart = [];
@@ -251,15 +274,14 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
         document.getElementById("customerForm").reset();
 
     } catch (error) {
-        alert("❌ Order place karne mein error aayi. Backend server chal raha hai check kar.");
+        alert("❌ Order place karne mein error aayi. Thoda wait karke phir try kar.");
         console.error(error);
+    } finally {
+        loadingText.style.display = "none";
+        paidBtn.disabled = false;
+        paidBtn.innerText = "✅ I Have Paid";
     }
 
-});
-
-// Cancel button
-document.getElementById("cancelPayBtn").addEventListener("click", () => {
-    paymentPopup.style.display = "none";
 });
 // ==========================
 // START
