@@ -1,0 +1,238 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+body {
+    background: #f4f5f7;
+    color: #222;
+    padding-bottom: 40px;
+}
+
+.admin-header {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-header h1 {
+    font-size: 22px;
+}
+
+.live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #00ff6a;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* STATS */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    padding: 20px 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-left: 5px solid #ccc;
+}
+
+.stat-card i {
+    font-size: 26px;
+    color: #666;
+}
+
+.stat-card h3 {
+    font-size: 24px;
+}
+
+.stat-card p {
+    font-size: 13px;
+    color: #777;
+}
+
+.stat-card.pending { border-left-color: #f0ad4e; }
+.stat-card.pending i { color: #f0ad4e; }
+
+.stat-card.preparing { border-left-color: #5bc0de; }
+.stat-card.preparing i { color: #5bc0de; }
+
+.stat-card.delivered { border-left-color: #5cb85c; }
+.stat-card.delivered i { color: #5cb85c; }
+
+.stat-card.revenue { border-left-color: #ff6b35; }
+.stat-card.revenue i { color: #ff6b35; }
+
+/* CONTROLS */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    padding: 0 30px 20px;
+}
+
+#searchOrder {
+    flex: 1;
+    min-width: 220px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.filter-btn.active, .filter-btn:hover {
+    background: #ff6b35;
+    color: white;
+    border-color: #ff6b35;
+}
+
+#refreshBtn {
+    padding: 8px 18px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+#refreshBtn:hover {
+    background: #555;
+}
+
+/* ORDERS */
+.orders-container {
+    padding: 0 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 15px;
+}
+
+.loading-text {
+    grid-column: 1/-1;
+    text-align: center;
+    color: #999;
+    padding: 40px;
+}
+
+.order-card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-left: 5px solid #ccc;
+}
+
+.order-card.pending { border-left-color: #f0ad4e; }
+.order-card.Preparing { border-left-color: #5bc0de; }
+.order-card.Delivered { border-left-color: #5cb85c; }
+.order-card.cancelled { border-left-color: #d9534f; }
+
+.order-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 10px;
+}
+
+.order-top h3 {
+    font-size: 16px;
+}
+
+.order-time {
+    font-size: 11px;
+    color: #999;
+}
+
+.order-phone {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.order-phone a {
+    color: #ff6b35;
+    text-decoration: none;
+}
+
+.order-items {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.order-total {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.order-total span {
+    color: #ff6b35;
+}
+
+.status-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .admin-header { flex-direction: column; gap: 10px; text-align: center; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .orders-container { grid-template-columns: 1fr; padding: 0 15px; }
+    .stats-container { padding: 15px; }
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - Shiv Shambu PATEZ</title>
+<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<script>
+    const adminPassword = "shivshambu123"; // Apna password yahan set kar
+    const enteredPassword = prompt("Enter Admin Password:");
+    if (enteredPassword !== adminPassword) {
+        alert("❌ Wrong Password! Access Denied.");
+        window.location.href = "index.html";
+    }
+</script>
+
+<header class="admin-header">
+    <h1><i class="fa-solid fa-store"></i> Shiv Shambu PATEZ — Admin Panel</h1>
+    <div class="live-indicator"><span class="dot"></span> Live</div>
+</header>
+
+<!-- STATS -->
+<div class="stats-container">
+    <div class="stat-card">
+        <i class="fa-solid fa-receipt"></i>
+        <div>
+            <h3 id="statTotalOrders">0</h3>
+            <p>Total Orders</p>
+        </div>
+    </div>
+    <div class="stat-card pending">
+        <i class="fa-solid fa-clock"></i>
+        <div>
+            <h3 id="statPending">0</h3>
+            <p>Pending</p>
+        </div>
+    </div>
+    <div class="stat-card preparing">
+        <i class="fa-solid fa-fire-burner"></i>
+        <div>
+            <h3 id="statPreparing">0</h3>
+            <p>Preparing</p>
+        </div>
+    </div>
+    <div class="stat-card delivered">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+            <h3 id="statDelivered">0</h3>
+            <p>Delivered</p>
+        </div>
+    </div>
+    <div class="stat-card revenue">
+        <i class="fa-solid fa-indian-rupee-sign"></i>
+        <div>
+            <h3 id="statRevenue">₹0</h3>
+            <p>Total Revenue</p>
+        </div>
+    </div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+    <input type="text" id="searchOrder" placeholder="🔍 Search by name or phone...">
+
+    <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="pending">Pending</button>
+        <button class="filter-btn" data-filter="Preparing">Preparing</button>
+        <button class="filter-btn" data-filter="Delivered">Delivered</button>
+    </div>
+
+    <button id="refreshBtn"><i class="fa-solid fa-rotate"></i> Refresh</button>
+</div>
+
+<!-- ORDERS -->
+<div class="orders-container" id="ordersContainer">
+    <p class="loading-text">Loading orders...</p>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
