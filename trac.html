@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Order - Shiv Shambu PATEZ</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="track.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<header>
+<nav class="navbar">
+<div class="logo">
+<i class="fa-solid fa-bowl-food"></i>
+<span>Shiv Shambu PATEZ</span>
+</div>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="index.html#menu">Menu</a></li>
+<li><a href="track.html">Track Order</a></li>
+<li><a href="index.html#contact">Contact</a></li>
+</ul>
+</nav>
+</header>
+
+<section class="track-section">
+
+    <h2 class="title">Track Your Order</h2>
+
+    <div class="track-box">
+
+        <p>Enter your last 6 characters of Order ID (shown after placing order)</p>
+
+        <div class="track-input-group">
+            <input type="text" id="orderIdInput" placeholder="e.g. A3F92B" maxlength="6">
+            <button id="trackBtn">Track</button>
+        </div>
+
+        <div id="trackResult"></div>
+
+    </div>
+
+</section>
+
+<script src="track.js"></script>
+</body>
+</html>

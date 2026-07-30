@@ -1,0 +1,119 @@
+.track-section {
+    padding: 60px 20px;
+    min-height: 60vh;
+    text-align: center;
+    background: #f9f9f9;
+}
+
+.track-box {
+    max-width: 500px;
+    margin: 20px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.track-box p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.track-input-group {
+    display: flex;
+    gap: 10px;
+}
+
+#orderIdInput {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+#trackBtn {
+    padding: 12px 24px;
+    background: #ff6b35;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#trackBtn:hover {
+    background: #e55a2b;
+}
+
+#trackResult {
+    margin-top: 25px;
+    text-align: left;
+}
+
+.order-found {
+    background: #f9f9f9;
+    padding: 18px;
+    border-radius: 10px;
+    border-left: 5px solid #ff6b35;
+}
+
+.order-found h3 {
+    margin-bottom: 10px;
+}
+
+.status-timeline {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    position: relative;
+}
+
+.status-step {
+    text-align: center;
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.status-step .circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #ddd;
+    margin: 0 auto 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+}
+
+.status-step.active .circle {
+    background: #ff6b35;
+}
+
+.status-step p {
+    font-size: 11px;
+    color: #777;
+}
+
+.status-line {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ddd;
+    z-index: 1;
+}
+
+.error-msg {
+    color: #d9534f;
+    text-align: center;
+    padding: 15px;
+}
