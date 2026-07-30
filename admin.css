@@ -229,6 +229,22 @@ body {
     font-size: 13px;
     cursor: pointer;
 }
+.delete-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px;
+    background: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.delete-btn:hover {
+    background: #c9302c;
+}
 
 @media (max-width: 600px) {
     .admin-header { flex-direction: column; gap: 10px; text-align: center; }

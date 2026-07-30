@@ -96,11 +96,15 @@ function renderOrders() {
                 </div>
 
                 <select class="status-select" onchange="updateStatus('${order._id}', this.value)">
-                    <option value="pending" ${status === "pending" ? "selected" : ""}>⏳ Pending</option>
-                    <option value="Preparing" ${status === "Preparing" ? "selected" : ""}>🔥 Preparing</option>
-                    <option value="Delivered" ${status === "Delivered" ? "selected" : ""}>✅ Delivered</option>
-                    <option value="cancelled" ${status === "cancelled" ? "selected" : ""}>❌ Cancelled</option>
-                </select>
+    <option value="pending" ${status === "pending" ? "selected" : ""}>⏳ Pending</option>
+    <option value="Preparing" ${status === "Preparing" ? "selected" : ""}>🔥 Preparing</option>
+    <option value="Delivered" ${status === "Delivered" ? "selected" : ""}>✅ Delivered</option>
+    <option value="cancelled" ${status === "cancelled" ? "selected" : ""}>❌ Cancelled</option>
+</select>
+
+<button class="delete-btn" onclick="deleteOrder('${order._id}')">
+    🗑️ Delete Order
+</button>
 
             </div>
         `;
@@ -126,6 +130,28 @@ async function updateStatus(id, status) {
     } catch (error) {
         console.error(error);
         alert("Status Update Failed");
+    }
+
+}
+async function deleteOrder(id) {
+
+    const confirmDelete = confirm("Are you sure you want to delete this order?");
+
+    if (!confirmDelete) return;
+
+    try {
+
+        const response = await fetch(`${API}/${id}`, {
+            method: "DELETE"
+        });
+
+        if (!response.ok) throw new Error("Delete failed");
+
+        loadOrders();
+
+    } catch (error) {
+        console.error(error);
+        alert("Order Delete Failed");
     }
 
 }
