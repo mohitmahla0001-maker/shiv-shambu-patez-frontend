@@ -72,6 +72,41 @@ document.getElementById("showLogin").addEventListener("click", (e) => {
     document.getElementById("loginFormBox").style.display = "block";
 });
 
+// ==========================
+// AUTH BUTTON LOADING STATE
+// (server can take 30-50s to wake up on Render's free tier)
+// ==========================
+
+function startAuthLoading(button, originalText) {
+
+    button.disabled = true;
+
+    const startTime = Date.now();
+
+    const interval = setInterval(() => {
+
+        const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+
+        if (elapsedSec < 5) {
+            button.innerText = "Please wait...";
+        } else if (elapsedSec < 15) {
+            button.innerText = `Waking up server... ${elapsedSec}s`;
+        } else if (elapsedSec < 30) {
+            button.innerText = `Almost there... ${elapsedSec}s`;
+        } else {
+            button.innerText = `Still working... ${elapsedSec}s`;
+        }
+
+    }, 1000);
+
+    return function stopAuthLoading() {
+        clearInterval(interval);
+        button.disabled = false;
+        button.innerText = originalText;
+    };
+
+}
+
 // REGISTER
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
 
@@ -81,6 +116,9 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     const phone = document.getElementById("regPhone").value;
     const email = document.getElementById("regEmail").value;
     const password = document.getElementById("regPassword").value;
+
+    const submitBtn = e.target.querySelector("button[type='submit']");
+    const stopLoading = startAuthLoading(submitBtn, "Register");
 
     try {
 
@@ -114,6 +152,8 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     } catch (error) {
         alert("❌ Registration failed. Try again.");
         console.error(error);
+    } finally {
+        stopLoading();
     }
 
 });
@@ -125,6 +165,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
     const identifier = document.getElementById("loginIdentifier").value;
     const password = document.getElementById("loginPassword").value;
+
+    const submitBtn = e.target.querySelector("button[type='submit']");
+    const stopLoading = startAuthLoading(submitBtn, "Login");
 
     try {
 
@@ -158,6 +201,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     } catch (error) {
         alert("❌ Login failed. Try again.");
         console.error(error);
+    } finally {
+        stopLoading();
     }
 
 });
