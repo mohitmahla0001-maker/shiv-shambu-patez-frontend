@@ -2,7 +2,151 @@
 // CART DATA
 // ==========================
 
-let cart = [];
+let cart = [];// ==========================
+// AUTHENTICATION
+// ==========================
+
+const AUTH_API = "https://shiv-shambu-patez-backend.onrender.com/api/auth";
+
+const authPopup = document.getElementById("authPopup");
+const loginBtn = document.getElementById("loginBtn");
+const authSection = document.getElementById("authSection");
+
+function getLoggedInUser() {
+    const userData = localStorage.getItem("patezUser");
+    return userData ? JSON.parse(userData) : null;
+}
+
+function updateAuthUI() {
+
+    const user = getLoggedInUser();
+
+    if (user) {
+        authSection.innerHTML = `
+            <div class="user-greeting">
+                👋 Hi, ${user.name.split(" ")[0]}
+                <span class="logout-link" id="logoutBtn">Logout</span>
+            </div>
+        `;
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("patezUser");
+            updateAuthUI();
+            alert("Logged out successfully");
+        });
+
+    } else {
+        authSection.innerHTML = `
+            <button id="loginBtn" class="login-btn">
+                <i class="fa-solid fa-user"></i> Login
+            </button>
+        `;
+
+        document.getElementById("loginBtn").addEventListener("click", () => {
+            authPopup.style.display = "flex";
+        });
+    }
+
+}
+
+document.getElementById("closeAuthPopup").addEventListener("click", () => {
+    authPopup.style.display = "none";
+});
+
+document.getElementById("showRegister").addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById("loginFormBox").style.display = "none";
+    document.getElementById("registerFormBox").style.display = "block";
+});
+
+document.getElementById("showLogin").addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById("registerFormBox").style.display = "none";
+    document.getElementById("loginFormBox").style.display = "block";
+});
+
+// REGISTER
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const name = document.getElementById("regName").value;
+    const phone = document.getElementById("regPhone").value;
+    const email = document.getElementById("regEmail").value;
+    const password = document.getElementById("regPassword").value;
+
+    try {
+
+        const response = await fetch(`${AUTH_API}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, phone, email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Registration failed");
+            return;
+        }
+
+        localStorage.setItem("patezUser", JSON.stringify(data.user));
+        localStorage.setItem("patezToken", data.token);
+
+        authPopup.style.display = "none";
+        updateAuthUI();
+        document.getElementById("registerForm").reset();
+
+        alert("✅ Registered successfully! Welcome " + data.user.name);
+
+    } catch (error) {
+        alert("❌ Registration failed. Try again.");
+        console.error(error);
+    }
+
+});
+
+// LOGIN
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const identifier = document.getElementById("loginIdentifier").value;
+    const password = document.getElementById("loginPassword").value;
+
+    try {
+
+        const response = await fetch(`${AUTH_API}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ identifier, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Login failed");
+            return;
+        }
+
+        localStorage.setItem("patezUser", JSON.stringify(data.user));
+        localStorage.setItem("patezToken", data.token);
+
+        authPopup.style.display = "none";
+        updateAuthUI();
+        document.getElementById("loginForm").reset();
+
+        alert("✅ Welcome back, " + data.user.name + "!");
+
+    } catch (error) {
+        alert("❌ Login failed. Try again.");
+        console.error(error);
+    }
+
+});
+
+// Page load pe UI update kar
+updateAuthUI();
 
 // ==========================
 // ADD TO CART
@@ -166,6 +310,27 @@ const UPI_ID = "7056468607@fam";
 let pendingOrderData = null;
 let pendingItemNames = "";
 let pendingTotalPrice = 0;
+document.querySelector(".checkout").addEventListener("click", () => {
+
+    if (cart.length === 0) {
+        alert("Your Cart is Empty");
+        return;
+    }
+
+    const user = getLoggedInUser();
+
+    if (user) {
+        document.getElementById("customerName").value = user.name;
+        document.getElementById("customerPhone").value = user.phone;
+        document.getElementById("customerEmail").value = user.email;
+        if (user.address) {
+            document.getElementById("customerAddress").value = user.address;
+        }
+    }
+
+    popup.style.display = "flex";
+
+});
 
 document.querySelector(".checkout").addEventListener("click", () => {
 

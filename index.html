@@ -48,11 +48,18 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 </ul>
 
-<div class="cart-btn">
+<div class="nav-right">
 
-<i class="fa-solid fa-cart-shopping"></i>
+    <div id="authSection">
+        <button id="loginBtn" class="login-btn">
+            <i class="fa-solid fa-user"></i> Login
+        </button>
+    </div>
 
-<span id="cart-count">0</span>
+    <div class="cart-btn">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>
+    </div>
 
 </div>
 
@@ -319,7 +326,53 @@ Made with ❤️
 </p>
 
 </footer>
+<!-- ================= AUTH POPUP ================= -->
 
+<div class="customer-popup" id="authPopup">
+
+    <div class="customer-box">
+
+        <div id="loginFormBox">
+
+            <h2>Login</h2>
+
+            <form id="loginForm">
+                <input type="text" id="loginIdentifier" placeholder="Email or Phone" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+
+            <p style="margin-top:12px; font-size:13px; text-align:center;">
+                New here? <a href="#" id="showRegister" style="color:#ff6b35;">Register</a>
+            </p>
+
+        </div>
+
+        <div id="registerFormBox" style="display:none;">
+
+            <h2>Register</h2>
+
+            <form id="registerForm">
+                <input type="text" id="regName" placeholder="Full Name" required>
+                <input type="tel" id="regPhone" placeholder="Phone Number" maxlength="10" required>
+                <input type="email" id="regEmail" placeholder="Email Address" required>
+                <input type="password" id="regPassword" placeholder="Password" required>
+                <button type="submit">Register</button>
+            </form>
+
+            <p style="margin-top:12px; font-size:13px; text-align:center;">
+                Already have an account? <a href="#" id="showLogin" style="color:#ff6b35;">Login</a>
+            </p>
+
+        </div>
+
+        <button id="closeAuthPopup" type="button" style="margin-top:10px; background:#999;">
+            Close
+        </button>
+
+    </div>
+
+</div>
 <!-- ================= CUSTOMER DETAILS ================= -->
 
 <div class="customer-popup" id="customerPopup">
