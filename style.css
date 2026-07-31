@@ -628,3 +628,50 @@ background:#ff5200;
     text-decoration: underline;
     font-size: 12px;
 }
+/* ================= POPUP CLOSE BUTTON ================= */
+
+.customer-box{
+    position: relative;
+}
+
+.popup-close{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #eee;
+    color: #333;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: .3s;
+}
+
+.popup-close:hover{
+    background: #ff6b35;
+    color: white;
+}
+
+/* keep login button pinned to the right corner on all screen sizes */
+.nav-right{
+    margin-left: auto;
+}
+
+@media(max-width:768px){
+    .navbar{
+        position: relative;
+    }
+    .nav-right{
+        position: absolute;
+        top: 18px;
+        right: 0;
+        margin-left: 0;
+    }
+}

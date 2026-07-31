@@ -389,6 +389,17 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
     paymentPopup.style.display = "flex";
 
 });
+// ==========================
+// CLOSE POPUPS (no order placed on close)
+// ==========================
+
+document.getElementById("closeCustomerPopup").addEventListener("click", () => {
+    popup.style.display = "none";
+});
+
+document.getElementById("cancelPayBtn").addEventListener("click", () => {
+    paymentPopup.style.display = "none";
+});
 
 // ==========================
 // LOADING UI (spinner + elapsed time + timeout messages)
