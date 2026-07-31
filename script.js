@@ -2,7 +2,9 @@
 // CART DATA
 // ==========================
 
-let cart = [];// ==========================
+let cart = [];
+
+// ==========================
 // AUTHENTICATION
 // ==========================
 
@@ -11,6 +13,10 @@ const AUTH_API = "https://shiv-shambu-patez-backend.onrender.com/api/auth";
 const authPopup = document.getElementById("authPopup");
 const loginBtn = document.getElementById("loginBtn");
 const authSection = document.getElementById("authSection");
+
+// true when the user clicked Checkout without being logged in —
+// tells us to auto-open the customer details popup right after login/register
+let checkoutPending = false;
 
 function getLoggedInUser() {
     const userData = localStorage.getItem("patezUser");
@@ -51,6 +57,7 @@ function updateAuthUI() {
 
 document.getElementById("closeAuthPopup").addEventListener("click", () => {
     authPopup.style.display = "none";
+    checkoutPending = false;
 });
 
 document.getElementById("showRegister").addEventListener("click", (e) => {
@@ -97,7 +104,12 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
         updateAuthUI();
         document.getElementById("registerForm").reset();
 
-        alert("✅ Registered successfully! Welcome " + data.user.name);
+        if (checkoutPending) {
+            checkoutPending = false;
+            openCustomerPopupWithUser(data.user);
+        } else {
+            alert("✅ Registered successfully! Welcome " + data.user.name);
+        }
 
     } catch (error) {
         alert("❌ Registration failed. Try again.");
@@ -136,7 +148,12 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         updateAuthUI();
         document.getElementById("loginForm").reset();
 
-        alert("✅ Welcome back, " + data.user.name + "!");
+        if (checkoutPending) {
+            checkoutPending = false;
+            openCustomerPopupWithUser(data.user);
+        } else {
+            alert("✅ Welcome back, " + data.user.name + "!");
+        }
 
     } catch (error) {
         alert("❌ Login failed. Try again.");
@@ -310,6 +327,18 @@ const UPI_ID = "7056468607@fam";
 let pendingOrderData = null;
 let pendingItemNames = "";
 let pendingTotalPrice = 0;
+
+// Fills the customer details popup with the logged-in user's info and opens it
+function openCustomerPopupWithUser(user) {
+    document.getElementById("customerName").value = user.name;
+    document.getElementById("customerPhone").value = user.phone;
+    document.getElementById("customerEmail").value = user.email;
+    if (user.address) {
+        document.getElementById("customerAddress").value = user.address;
+    }
+    popup.style.display = "flex";
+}
+
 document.querySelector(".checkout").addEventListener("click", () => {
 
     if (cart.length === 0) {
@@ -319,27 +348,15 @@ document.querySelector(".checkout").addEventListener("click", () => {
 
     const user = getLoggedInUser();
 
-    if (user) {
-        document.getElementById("customerName").value = user.name;
-        document.getElementById("customerPhone").value = user.phone;
-        document.getElementById("customerEmail").value = user.email;
-        if (user.address) {
-            document.getElementById("customerAddress").value = user.address;
-        }
-    }
-
-    popup.style.display = "flex";
-
-});
-
-document.querySelector(".checkout").addEventListener("click", () => {
-
-    if (cart.length === 0) {
-        alert("Your Cart is Empty");
+    if (!user) {
+        // Not logged in — ask them to login/register first.
+        // Once they succeed, openCustomerPopupWithUser() runs automatically.
+        checkoutPending = true;
+        authPopup.style.display = "flex";
         return;
     }
 
-    popup.style.display = "flex";
+    openCustomerPopupWithUser(user);
 
 });
 
@@ -389,6 +406,7 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
     paymentPopup.style.display = "flex";
 
 });
+
 // ==========================
 // CLOSE POPUPS (no order placed on close)
 // ==========================
