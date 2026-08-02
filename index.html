@@ -6,6 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Shiv Shambu PATEZ</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff6b00">
+<link rel="apple-touch-icon" href="images/icon-192.png">
 
 <link rel="stylesheet" href="style.css">
 
@@ -347,6 +350,9 @@ Made with ❤️
             <p style="margin-top:12px; font-size:13px; text-align:center;">
                 New here? <a href="#" id="showRegister" style="color:#ff6b35;">Register</a>
             </p>
+            <p style="margin-top:8px; font-size:13px; text-align:center;">
+    <a href="#" id="showForgotPassword" style="color:#999;">Forgot Password?</a>
+</p>
 
         </div>
 
@@ -367,6 +373,16 @@ Made with ❤️
             </p>
 
         </div>
+        <div id="forgotPasswordBox" style="display:none;">
+    <h2>Reset Password</h2>
+    <form id="forgotPasswordForm">
+        <input type="email" id="forgotEmail" placeholder="Registered Email" required>
+        <button type="submit">Send New Password</button>
+    </form>
+    <p style="margin-top:12px; font-size:13px; text-align:center;">
+        <a href="#" id="backToLoginFromForgot" style="color:#ff6b35;">Back to Login</a>
+    </p>
+</div>
 
         <button id="closeAuthPopup" type="button" style="margin-top:10px; background:#999;">
             Close
@@ -374,6 +390,15 @@ Made with ❤️
 
     </div>
 
+</div>
+<div class="customer-popup" id="myOrdersPopup">
+    <div class="customer-box" style="max-width:450px; max-height:80vh; overflow-y:auto;">
+        <button type="button" class="popup-close" id="closeMyOrdersPopup" aria-label="Close">&times;</button>
+        <h2>My Orders</h2>
+        <div id="myOrdersList">
+            <p style="text-align:center; opacity:0.7;">Loading...</p>
+        </div>
+    </div>
 </div>
 <!-- ================= CUSTOMER DETAILS ================= -->
 

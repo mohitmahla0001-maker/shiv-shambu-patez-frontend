@@ -9,13 +9,12 @@ let cart = [];
 // ==========================
 
 const AUTH_API = "https://shiv-shambu-patez-backend.onrender.com/api/auth";
+const ORDERS_API = "https://shiv-shambu-patez-backend.onrender.com/api/orders";
 
 const authPopup = document.getElementById("authPopup");
 const loginBtn = document.getElementById("loginBtn");
 const authSection = document.getElementById("authSection");
 
-// true when the user clicked Checkout without being logged in —
-// tells us to auto-open the customer details popup right after login/register
 let checkoutPending = false;
 
 function getLoggedInUser() {
@@ -31,6 +30,7 @@ function updateAuthUI() {
         authSection.innerHTML = `
             <div class="user-greeting">
                 👋 Hi, ${user.name.split(" ")[0]}
+                <span class="my-orders-link" id="myOrdersLink">My Orders</span>
                 <span class="logout-link" id="logoutBtn">Logout</span>
             </div>
         `;
@@ -39,6 +39,11 @@ function updateAuthUI() {
             localStorage.removeItem("patezUser");
             updateAuthUI();
             alert("Logged out successfully");
+        });
+
+        document.getElementById("myOrdersLink").addEventListener("click", () => {
+            document.getElementById("myOrdersPopup").style.display = "flex";
+            loadMyOrders();
         });
 
     } else {
@@ -73,8 +78,60 @@ document.getElementById("showLogin").addEventListener("click", (e) => {
 });
 
 // ==========================
+// FORGOT PASSWORD
+// ==========================
+
+document.getElementById("showForgotPassword").addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById("loginFormBox").style.display = "none";
+    document.getElementById("forgotPasswordBox").style.display = "block";
+});
+
+document.getElementById("backToLoginFromForgot").addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById("forgotPasswordBox").style.display = "none";
+    document.getElementById("loginFormBox").style.display = "block";
+});
+
+document.getElementById("forgotPasswordForm").addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const email = document.getElementById("forgotEmail").value;
+    const submitBtn = e.target.querySelector("button[type='submit']");
+    const stopLoading = startAuthLoading(submitBtn, "Send New Password");
+
+    try {
+
+        const response = await fetch(`${AUTH_API}/forgot-password`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Something went wrong");
+            return;
+        }
+
+        alert("✅ " + data.message);
+        document.getElementById("forgotPasswordForm").reset();
+        document.getElementById("forgotPasswordBox").style.display = "none";
+        document.getElementById("loginFormBox").style.display = "block";
+
+    } catch (error) {
+        alert("❌ Failed to send reset email. Try again.");
+        console.error(error);
+    } finally {
+        stopLoading();
+    }
+
+});
+
+// ==========================
 // AUTH BUTTON LOADING STATE
-// (server can take 30-50s to wake up on Render's free tier)
 // ==========================
 
 function startAuthLoading(button, originalText) {
@@ -207,8 +264,114 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
 });
 
-// Page load pe UI update kar
 updateAuthUI();
+
+// ==========================
+// MY ORDERS (tracking + cancel)
+// ==========================
+
+function statusLabel(status) {
+    const labels = {
+        pending: "🕓 Pending",
+        confirmed: "👨‍🍳 Preparing",
+        delivered: "✅ Delivered",
+        cancelled: "❌ Cancelled"
+    };
+    return labels[status] || status;
+}
+
+async function loadMyOrders() {
+
+    const listEl = document.getElementById("myOrdersList");
+    listEl.innerHTML = "<p style='text-align:center; opacity:0.7;'>Loading...</p>";
+
+    const user = getLoggedInUser();
+    if (!user) return;
+
+    try {
+
+        const response = await fetch(`${ORDERS_API}?phone=${user.phone}`);
+        const orders = await response.json();
+
+        if (!response.ok) {
+            listEl.innerHTML = "<p style='text-align:center;'>Could not load orders.</p>";
+            return;
+        }
+
+        if (orders.length === 0) {
+            listEl.innerHTML = "<p style='text-align:center; opacity:0.7;'>No orders yet.</p>";
+            return;
+        }
+
+        listEl.innerHTML = orders.map(order => {
+
+            const shortId = order._id.slice(-6).toUpperCase();
+            const itemsText = order.items.map(i => `${i.name} x${i.quantity}`).join(", ");
+            const canCancel = order.status === "pending" || order.status === "confirmed";
+
+            return `
+                <div class="order-card">
+                    <div class="order-card-top">
+                        <span>#${shortId}</span>
+                        <span>${statusLabel(order.status)}</span>
+                    </div>
+                    <p class="order-card-items">${itemsText}</p>
+                    <p class="order-card-total">₹${order.totalAmount}</p>
+                    ${canCancel ? `<button class="cancel-order-btn" data-id="${order._id}">Cancel Order</button>` : ""}
+                </div>
+            `;
+
+        }).join("");
+
+        document.querySelectorAll(".cancel-order-btn").forEach(btn => {
+
+            btn.addEventListener("click", async () => {
+
+                if (!confirm("Are you sure you want to cancel this order?")) return;
+
+                btn.disabled = true;
+                btn.innerText = "Cancelling...";
+
+                try {
+
+                    const res = await fetch(`${ORDERS_API}/${btn.dataset.id}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ status: "cancelled" })
+                    });
+
+                    const data = await res.json();
+
+                    if (!res.ok) {
+                        alert(data.message || "Could not cancel order");
+                        btn.disabled = false;
+                        btn.innerText = "Cancel Order";
+                        return;
+                    }
+
+                    loadMyOrders();
+
+                } catch (error) {
+                    alert("❌ Failed to cancel order.");
+                    console.error(error);
+                    btn.disabled = false;
+                    btn.innerText = "Cancel Order";
+                }
+
+            });
+
+        });
+
+    } catch (error) {
+        listEl.innerHTML = "<p style='text-align:center;'>Could not load orders.</p>";
+        console.error(error);
+    }
+
+}
+
+document.getElementById("closeMyOrdersPopup").addEventListener("click", () => {
+    document.getElementById("myOrdersPopup").style.display = "none";
+});
 
 // ==========================
 // ADD TO CART
@@ -373,7 +536,6 @@ let pendingOrderData = null;
 let pendingItemNames = "";
 let pendingTotalPrice = 0;
 
-// Fills the customer details popup with the logged-in user's info and opens it
 function openCustomerPopupWithUser(user) {
     document.getElementById("customerName").value = user.name;
     document.getElementById("customerPhone").value = user.phone;
@@ -394,8 +556,6 @@ document.querySelector(".checkout").addEventListener("click", () => {
     const user = getLoggedInUser();
 
     if (!user) {
-        // Not logged in — ask them to login/register first.
-        // Once they succeed, openCustomerPopupWithUser() runs automatically.
         checkoutPending = true;
         authPopup.style.display = "flex";
         return;
@@ -438,10 +598,7 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
     pendingItemNames = itemNames;
     pendingTotalPrice = totalPrice;
 
-    // UPI payment link bana
     const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv Shambu Patez&am=${totalPrice}&cu=INR`;
-
-    // QR code generate kar (free API use kar rahe hain)
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
 
     document.getElementById("qrCodeImg").src = qrUrl;
@@ -465,10 +622,9 @@ document.getElementById("cancelPayBtn").addEventListener("click", () => {
 });
 
 // ==========================
-// LOADING UI (spinner + elapsed time + timeout messages)
+// LOADING UI
 // ==========================
 
-// Inject spinner CSS once (no separate stylesheet edit needed)
 (function injectLoadingStyles() {
     const style = document.createElement("style");
     style.textContent = `
@@ -503,8 +659,6 @@ document.getElementById("cancelPayBtn").addEventListener("click", () => {
     document.head.appendChild(style);
 })();
 
-// Make sure #loadingText exists even if the HTML wasn't updated.
-// If it's missing, build it and drop it right before the paidBtn.
 function ensureLoadingTextElement() {
 
     let loadingText = document.getElementById("loadingText");
@@ -527,7 +681,6 @@ function ensureLoadingTextElement() {
 
 }
 
-// "I Have Paid" button
 document.getElementById("paidBtn").addEventListener("click", async () => {
 
     const loadingText = ensureLoadingTextElement();
@@ -541,8 +694,6 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
     const startTime = Date.now();
 
-    // Update elapsed time + escalate the message the longer it takes
-    // (useful for free-tier backends like Render that "cold start")
     const timerInterval = setInterval(() => {
 
         const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
@@ -576,7 +727,6 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
         paymentPopup.style.display = "none";
 
-        // ===== WHATSAPP NOTIFICATION =====
         const orderSummary = `🍽️ *New Order - Shiv Shambu PATEZ*\n\n` +
             `Order ID: #${shortOrderId}\n` +
             `Name: ${pendingOrderData.customerName}\n` +
@@ -588,7 +738,6 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
         const ownerWhatsappLink = `https://wa.me/917056468607?text=${encodeURIComponent(orderSummary)}`;
         window.open(ownerWhatsappLink, "_blank");
-        // ===== END WHATSAPP =====
 
         alert(
             "✅ Order Placed Successfully!\n\n" +
@@ -614,39 +763,39 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
     }
 
 });
+
+// ==========================
+// PWA - INSTALL APP
+// ==========================
+
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").catch(console.error);
+}
+
+let deferredInstallPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+
+    const installBtn = document.createElement("button");
+    installBtn.id = "installAppBtn";
+    installBtn.innerHTML = '<i class="fa-solid fa-download"></i> Install App';
+    installBtn.style.cssText = "background:#ff6b00;color:white;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:13px;margin-right:12px;";
+
+    const navRight = document.querySelector(".nav-right");
+    navRight.prepend(installBtn);
+
+    installBtn.addEventListener("click", async () => {
+        installBtn.remove();
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+    });
+});
+
 // ==========================
 // START
 // ==========================
 
-updateCart();e
-document.getElementById("forgotPasswordLink").addEventListener("click", async (e) => {
-
-    e.preventDefault();
-
-    const email = prompt("Enter your registered email address:");
-
-    if (!email) return;
-
-    try {
-
-        const response = await fetch(`${AUTH_API}/forgot-password`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            alert(data.message || "Something went wrong");
-            return;
-        }
-
-        alert("✅ " + data.message + "\n\nPlease check your email inbox (and spam folder).");
-
-    } catch (error) {
-        alert("❌ Failed to send reset email. Try again later.");
-        console.error(error);
-    }
-
-});
+updateCart();

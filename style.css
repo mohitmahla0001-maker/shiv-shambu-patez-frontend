@@ -814,3 +814,50 @@ footer p {
     }
 
 }
+.my-orders-link{
+    color: #ff6b35;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.order-card{
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.order-card-top{
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.order-card-items{
+    font-size: 13px;
+    color: #666;
+    margin: 6px 0;
+}
+
+.order-card-total{
+    font-weight: 600;
+}
+
+.cancel-order-btn{
+    width: 100%;
+    margin-top: 8px;
+    background: #d9534f !important;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px !important;
+}
+
+.cancel-order-btn:hover{
+    background: #c9302c !important;
+}
