@@ -26,7 +26,7 @@ document.getElementById("trackBtn").addEventListener("click", async () => {
 
         const status = order.status || "pending";
 
-        const statuses = ["pending", "Preparing", "Delivered"];
+       const statuses = ["pending", "Preparing", "Ready", "Delivered"];
         const currentIndex = statuses.findIndex(s => s.toLowerCase() === status.toLowerCase());
 
         const itemsHtml = order.items && order.items.length

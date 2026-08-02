@@ -252,3 +252,4 @@ body {
     .orders-container { grid-template-columns: 1fr; padding: 0 15px; }
     .stats-container { padding: 15px; }
 }
+.order-card.Ready { border-left-color: #9b59b6; }
