@@ -273,8 +273,8 @@ updateAuthUI();
 function statusLabel(status) {
     const labels = {
         pending: "🕓 Pending",
-        confirmed: "👨‍🍳 Preparing",
-        delivered: "✅ Delivered",
+        Preparing: "👨‍🍳 Preparing",
+        Delivered: "✅ Delivered",
         cancelled: "❌ Cancelled"
     };
     return labels[status] || status;
@@ -307,7 +307,7 @@ async function loadMyOrders() {
 
             const shortId = order._id.slice(-6).toUpperCase();
             const itemsText = order.items.map(i => `${i.name} x${i.quantity}`).join(", ");
-            const canCancel = order.status === "pending" || order.status === "confirmed";
+           const canCancel = order.status === "pending" || order.status === "Preparing";
 
             return `
                 <div class="order-card">
