@@ -618,4 +618,35 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 // START
 // ==========================
 
-updateCart();
+updateCart();e
+document.getElementById("forgotPasswordLink").addEventListener("click", async (e) => {
+
+    e.preventDefault();
+
+    const email = prompt("Enter your registered email address:");
+
+    if (!email) return;
+
+    try {
+
+        const response = await fetch(`${AUTH_API}/forgot-password`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Something went wrong");
+            return;
+        }
+
+        alert("✅ " + data.message + "\n\nPlease check your email inbox (and spam folder).");
+
+    } catch (error) {
+        alert("❌ Failed to send reset email. Try again later.");
+        console.error(error);
+    }
+
+});
