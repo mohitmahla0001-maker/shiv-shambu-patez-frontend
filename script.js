@@ -16,6 +16,7 @@ const loginBtn = document.getElementById("loginBtn");
 const authSection = document.getElementById("authSection");
 
 let checkoutPending = false;
+let myOrdersRefreshInterval = null;
 
 function getLoggedInUser() {
     const userData = localStorage.getItem("patezUser");
@@ -42,9 +43,13 @@ function updateAuthUI() {
         });
 
         document.getElementById("myOrdersLink").addEventListener("click", () => {
-            document.getElementById("myOrdersPopup").style.display = "flex";
-            loadMyOrders();
-        });
+    document.getElementById("myOrdersPopup").style.display = "flex";
+    loadMyOrders();
+
+    // popup khula rehte hi har 10 second mein status khud check karta rahega
+    clearInterval(myOrdersRefreshInterval);
+    myOrdersRefreshInterval = setInterval(loadMyOrders, 10000);
+});
 
     } else {
         authSection.innerHTML = `
@@ -274,6 +279,7 @@ function statusLabel(status) {
     const labels = {
         pending: "🕓 Pending",
         Preparing: "👨‍🍳 Preparing",
+        Ready: "📦 Ready - Pickup from Stall",
         Delivered: "✅ Delivered",
         cancelled: "❌ Cancelled"
     };
@@ -371,6 +377,14 @@ async function loadMyOrders() {
 
 document.getElementById("closeMyOrdersPopup").addEventListener("click", () => {
     document.getElementById("myOrdersPopup").style.display = "none";
+    clearInterval(myOrdersRefreshInterval);
+});
+// Auto-refresh My Orders popup every 10 seconds while it's open,
+// so status updates show up without the customer manually refreshing
+let myOrdersRefreshInterval = null;
+
+document.getElementById("myOrdersLink")?.addEventListener("click", () => {
+    // handled inside updateAuthUI, this is just a safety no-op
 });
 
 // ==========================

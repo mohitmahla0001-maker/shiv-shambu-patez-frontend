@@ -98,6 +98,7 @@ function renderOrders() {
                 <select class="status-select" onchange="updateStatus('${order._id}', this.value)">
     <option value="pending" ${status === "pending" ? "selected" : ""}>⏳ Pending</option>
     <option value="Preparing" ${status === "Preparing" ? "selected" : ""}>🔥 Preparing</option>
+    <option value="Ready" ${status === "Ready" ? "selected" : ""}>📦 Ready - Pickup from Stall</option>
     <option value="Delivered" ${status === "Delivered" ? "selected" : ""}>✅ Delivered</option>
     <option value="cancelled" ${status === "cancelled" ? "selected" : ""}>❌ Cancelled</option>
 </select>
