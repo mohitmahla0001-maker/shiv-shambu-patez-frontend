@@ -379,13 +379,7 @@ document.getElementById("closeMyOrdersPopup").addEventListener("click", () => {
     document.getElementById("myOrdersPopup").style.display = "none";
     clearInterval(myOrdersRefreshInterval);
 });
-// Auto-refresh My Orders popup every 10 seconds while it's open,
-// so status updates show up without the customer manually refreshing
-let myOrdersRefreshInterval = null;
-
-document.getElementById("myOrdersLink")?.addEventListener("click", () => {
-    // handled inside updateAuthUI, this is just a safety no-op
-});
+// Auto-refresh My Orders popup every 10 seconds while it's 
 
 // ==========================
 // ADD TO CART
