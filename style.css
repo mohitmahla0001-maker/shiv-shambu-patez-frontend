@@ -659,3 +659,158 @@ footer p {
     font-size: 12px;
     margin-top: 10px;
 }
+/* ==========================================================
+   MOBILE RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 768px) {
+
+    /* Navbar */
+    .navbar {
+        flex-direction: column;
+        gap: 14px;
+        padding: 14px 20px;
+    }
+
+    .navbar ul {
+        gap: 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .navbar ul li a {
+        font-size: 12px;
+    }
+
+    .nav-right {
+        gap: 10px;
+    }
+
+    .login-btn {
+        padding: 7px 14px;
+        font-size: 11px;
+        margin-right: 10px;
+    }
+
+    /* Hero */
+    .hero {
+        flex-direction: column;
+        padding: 40px 20px;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .hero-left h1 {
+        font-size: 32px;
+    }
+
+    .hero-left p {
+        margin: 0 auto 28px;
+        font-size: 14px;
+    }
+
+    .hero-right {
+        order: -1;
+    }
+
+    /* Search */
+    .search-section {
+        padding: 0 20px;
+        margin-bottom: 40px;
+    }
+
+    /* Menu */
+    #menu {
+        padding: 20px 20px 50px;
+    }
+
+    .title {
+        font-size: 26px;
+    }
+
+    .food-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+        margin-top: 30px;
+    }
+
+    .food-card img {
+        height: 130px;
+    }
+
+    .food-card h3 {
+        font-size: 15px;
+        margin: 12px 12px 4px;
+    }
+
+    .food-card h4 {
+        font-size: 16px;
+    }
+
+    .food-card button {
+        padding: 8px 18px;
+        font-size: 10px;
+    }
+
+    /* Cart */
+    .cart {
+        max-width: 100%;
+        margin: 0 20px 50px;
+        padding: 22px;
+    }
+
+    /* Contact */
+    .contact-section {
+        padding: 50px 20px;
+    }
+
+    .contact-container {
+        gap: 14px;
+    }
+
+    .contact-card {
+        padding: 22px 28px;
+        min-width: 140px;
+    }
+
+    /* Footer */
+    footer {
+        padding: 35px 20px;
+    }
+
+    .social {
+        gap: 16px;
+    }
+
+    /* Popups */
+    .customer-box {
+        padding: 24px;
+        max-width: 100%;
+    }
+
+    .customer-box h2 {
+        font-size: 19px;
+    }
+
+    #qrCodeImg {
+        width: 200px !important;
+        height: 200px !important;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+    .hero-left h1 {
+        font-size: 26px;
+    }
+
+    .food-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .navbar ul {
+        gap: 12px;
+    }
+
+}
