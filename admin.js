@@ -103,6 +103,13 @@ function renderOrders() {
     <option value="cancelled" ${status === "cancelled" ? "selected" : ""}>❌ Cancelled</option>
 </select>
 
+${status !== "Delivered" && status !== "cancelled" ? `
+<div class="otp-verify-box">
+    <input type="text" id="otp-${order._id}" placeholder="Enter Delivery OTP" maxlength="4">
+    <button onclick="verifyOTP('${order._id}')">Verify & Deliver</button>
+</div>
+` : ""}
+
 <button class="delete-btn" onclick="deleteOrder('${order._id}')">
     🗑️ Delete Order
 </button>
@@ -131,6 +138,40 @@ async function updateStatus(id, status) {
     } catch (error) {
         console.error(error);
         alert("Status Update Failed");
+    }
+
+}
+async function verifyOTP(id) {
+
+    const input = document.getElementById(`otp-${id}`);
+    const otp = input.value.trim();
+
+    if (!otp || otp.length !== 4) {
+        alert("Please enter a valid 4-digit OTP");
+        return;
+    }
+
+    try {
+
+        const response = await fetch(`${API}/${id}/verify-otp`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ otp })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "OTP verification failed");
+            return;
+        }
+
+        alert("✅ " + data.message);
+        loadOrders();
+
+    } catch (error) {
+        console.error(error);
+        alert("❌ Failed to verify OTP");
     }
 
 }
