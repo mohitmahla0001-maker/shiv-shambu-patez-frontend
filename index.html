@@ -135,29 +135,18 @@ Our Special Menu
 
 <!-- CARD 1 -->
 
-<div class="food-card">
-
+<div class="food-card" data-price="15">
 <img src="images/simple-patez.jpeg">
-
 <h3>Simple PATEZ</h3>
-
 <p>Fresh Crispy Taste</p>
-
 <h4>₹15</h4>
-
-<button
-
-onclick="addToCart('Simple PATEZ',15)">
-
-Add To Cart
-
-</button>
-
+<div class="card-btn-container">
+<button onclick="addToCart('Simple PATEZ',15)">Add To Cart</button>
 </div>
-
+</div>
 <!-- CARD 2 -->
 
-<div class="food-card">
+<div class="food-card" data-price="20">
 
 <img src="images/stuff-patez.jpeg">
 
@@ -167,6 +156,7 @@ Add To Cart
 
 <h4>₹20</h4>
 
+<div class="card-btn-container">
 <button
 
 onclick="addToCart('Stuff PATEZ',20)">
@@ -174,12 +164,13 @@ onclick="addToCart('Stuff PATEZ',20)">
 Add To Cart
 
 </button>
+</div>
 
 </div>
 
 <!-- CARD 3 -->
 
-<div class="food-card">
+<div class="food-card" data-price="30">
 
 <img src="images/large-patez.jpeg">
 
@@ -189,6 +180,7 @@ Add To Cart
 
 <h4>₹30</h4>
 
+<div class="card-btn-container">
 <button
 
 onclick="addToCart('Large Stuff PATEZ',30)">
@@ -196,12 +188,13 @@ onclick="addToCart('Large Stuff PATEZ',30)">
 Add To Cart
 
 </button>
+</div>
 
 </div>
 
 <!-- CARD 4 -->
 
-<div class="food-card">
+<div class="food-card" data-price="30">
 
 <img src="images/paneer-patez.jpeg">
 
@@ -211,6 +204,7 @@ Add To Cart
 
 <h4>₹30</h4>
 
+<div class="card-btn-container">
 <button
 
 onclick="addToCart('Paneer PATEZ',30)">
@@ -218,11 +212,9 @@ onclick="addToCart('Paneer PATEZ',30)">
 Add To Cart
 
 </button>
-
 </div>
 
 </div>
-
 </section>
 
 <!--================ CART ================-->
@@ -427,11 +419,22 @@ Made with ❤️
 id="customerEmail"
 placeholder="Email Address"
 required>
+<button type="button" id="useLocationBtn" style="width:100%; margin-bottom:10px; background:transparent; border:1px solid var(--accent); color:var(--accent); padding:10px; border-radius:4px; cursor:pointer; font-size:12px;">
+    📍 Use My Current Location
+</button>
             <textarea
             id="customerAddress"
             placeholder="Full Address"
             rows="4"
             required></textarea>
+            <div class="payment-method-select">
+    <label>
+        <input type="radio" name="paymentMethod" value="UPI" checked> 💳 Pay Online (UPI)
+    </label>
+    <label>
+        <input type="radio" name="paymentMethod" value="COD"> 💵 Cash on Delivery
+    </label>
+</div>
 
             <button type="submit">
                 Continue To Payment

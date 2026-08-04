@@ -861,3 +861,41 @@ footer p {
 .cancel-order-btn:hover{
     background: #c9302c !important;
 }
+.card-qty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.card-qty button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-bright);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.card-qty span {
+    font-size: 15px;
+    font-weight: 600;
+    min-width: 18px;
+}
+.payment-method-select {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 14px 0;
+}
+
+.payment-method-select label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+}

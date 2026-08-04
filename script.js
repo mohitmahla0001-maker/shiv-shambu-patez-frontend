@@ -465,7 +465,43 @@ function updateCart() {
     totalPrice.innerText = total;
 
     cartCount.innerText = count;
+    updateCardButtons();
 
+
+}
+function updateCardButtons() {
+
+    document.querySelectorAll(".food-card").forEach(card => {
+
+        const name = card.querySelector("h3").innerText;
+        const price = Number(card.dataset.price);
+        const item = cart.find(i => i.name === name);
+        const container = card.querySelector(".card-btn-container");
+
+        if (item) {
+            container.innerHTML = `
+                <div class="card-qty">
+                    <button onclick="decreaseByName('${name}')">-</button>
+                    <span>${item.quantity}</span>
+                    <button onclick="increaseByName('${name}')">+</button>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `<button onclick="addToCart('${name}', ${price})">Add To Cart</button>`;
+        }
+
+    });
+
+}
+
+function increaseByName(name) {
+    const index = cart.findIndex(i => i.name === name);
+    if (index > -1) increaseItem(index);
+}
+
+function decreaseByName(name) {
+    const index = cart.findIndex(i => i.name === name);
+    if (index > -1) decreaseItem(index);
 }
 
 // ==========================
@@ -589,22 +625,32 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
 
     let itemNames = cart.map(item => `${item.name} x${item.quantity}`).join(", ");
     let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
 
-    pendingOrderData = {
-        customerName: name,
-        phone: phone,
-        email: email,
-        address: address,
-        items: cart.map(item => ({
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price
-        })),
-        totalAmount: totalPrice
-    };
+pendingOrderData = {
+    customerName: name,
+    phone: phone,
+    email: email,
+    address: address,
+    paymentMethod: paymentMethod,
+    items: cart.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+    })),
+    totalAmount: totalPrice
+};
+popup.style.display = "none";
 
-    pendingItemNames = itemNames;
-    pendingTotalPrice = totalPrice;
+if (paymentMethod === "COD") {
+    placeOrder(false);
+} else {
+    const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv Shambu Patez&am=${totalPrice}&cu=INR`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
+    document.getElementById("qrCodeImg").src = qrUrl;
+    document.getElementById("payAmountText").innerText = "Amount to Pay: ₹" + totalPrice;
+    paymentPopup.style.display = "flex";
+}
 
     const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv Shambu Patez&am=${totalPrice}&cu=INR`;
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
@@ -614,6 +660,39 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
 
     popup.style.display = "none";
     paymentPopup.style.display = "flex";
+
+});
+document.getElementById("useLocationBtn").addEventListener("click", () => {
+
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported in your browser");
+        return;
+    }
+
+    const btn = document.getElementById("useLocationBtn");
+    btn.innerText = "📍 Fetching location...";
+
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+
+        const { latitude, longitude } = pos.coords;
+
+        try {
+
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+            const data = await response.json();
+
+            document.getElementById("customerAddress").value = data.display_name || `Lat: ${latitude}, Lng: ${longitude}`;
+
+        } catch (error) {
+            document.getElementById("customerAddress").value = `Lat: ${latitude}, Lng: ${longitude}`;
+        } finally {
+            btn.innerText = "📍 Use My Current Location";
+        }
+
+    }, () => {
+        alert("Could not get your location. Please enable location access in your browser and try again.");
+        btn.innerText = "📍 Use My Current Location";
+    });
 
 });
 
@@ -689,35 +768,34 @@ function ensureLoadingTextElement() {
 
 }
 
-document.getElementById("paidBtn").addEventListener("click", async () => {
+document.getElementById("paidBtn").addEventListener("click", () => {
+    placeOrder(true);
+});
+
+async function placeOrder(closePaymentPopup) {
 
     const loadingText = ensureLoadingTextElement();
     const loadingMessage = document.getElementById("loadingMessage");
     const loadingTimer = document.getElementById("loadingTimer");
     const paidBtn = document.getElementById("paidBtn");
 
-    loadingText.style.display = "block";
-    paidBtn.disabled = true;
-    paidBtn.innerText = "Processing...";
+    if (closePaymentPopup) {
+        loadingText.style.display = "block";
+        paidBtn.disabled = true;
+        paidBtn.innerText = "Processing...";
+    }
 
     const startTime = Date.now();
 
     const timerInterval = setInterval(() => {
-
         const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
-
-        loadingTimer.innerText = `${elapsedSec}s elapsed`;
-
-        if (elapsedSec < 5) {
-            loadingMessage.innerText = "Processing your order...";
-        } else if (elapsedSec < 15) {
-            loadingMessage.innerText = "Waking up the server, please wait...";
-        } else if (elapsedSec < 30) {
-            loadingMessage.innerText = "Almost there, server is starting up...";
-        } else {
-            loadingMessage.innerText = "Taking longer than usual, please don't close this tab...";
+        if (loadingTimer) loadingTimer.innerText = `${elapsedSec}s elapsed`;
+        if (loadingMessage) {
+            if (elapsedSec < 5) loadingMessage.innerText = "Processing your order...";
+            else if (elapsedSec < 15) loadingMessage.innerText = "Waking up the server, please wait...";
+            else if (elapsedSec < 30) loadingMessage.innerText = "Almost there, server is starting up...";
+            else loadingMessage.innerText = "Taking longer than usual, please don't close this tab...";
         }
-
     }, 1000);
 
     try {
@@ -735,14 +813,23 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
 
         paymentPopup.style.display = "none";
 
-        const orderSummary = `🍽️ *New Order - Shiv Shambu PATEZ*\n\n` +
-            `Order ID: #${shortOrderId}\n` +
-            `Name: ${pendingOrderData.customerName}\n` +
-            `Phone: ${pendingOrderData.phone}\n` +
-            `Address: ${pendingOrderData.address}\n\n` +
-            `Items:\n${pendingItemNames}\n\n` +
-            `Total: ₹${pendingTotalPrice}\n` +
-            `Status: Payment Done ✅`;
+        const itemsFormatted = pendingOrderData.items
+            .map(item => `• ${item.name} — Qty: ${item.quantity} — ₹${item.price * item.quantity}`)
+            .join("\n");
+
+        const paymentStatusText = pendingOrderData.paymentMethod === "COD"
+            ? "💵 Cash on Delivery"
+            : "✅ Payment Done (UPI)";
+
+        const orderSummary = `🍽️ *NEW ORDER - Shiv Shambu PATEZ*\n` +
+            `━━━━━━━━━━━━━━\n\n` +
+            `📋 *Order ID:* #${shortOrderId}\n\n` +
+            `👤 *Customer:* ${pendingOrderData.customerName}\n` +
+            `📞 *Phone:* ${pendingOrderData.phone}\n` +
+            `📍 *Address:* ${pendingOrderData.address}\n\n` +
+            `🛒 *Items:*\n${itemsFormatted}\n\n` +
+            `💰 *Total: ₹${pendingOrderData.totalAmount}*\n` +
+            `${paymentStatusText}`;
 
         const ownerWhatsappLink = `https://wa.me/917056468607?text=${encodeURIComponent(orderSummary)}`;
         window.open(ownerWhatsappLink, "_blank");
@@ -750,10 +837,9 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
         alert(
             "✅ Order Placed Successfully!\n\n" +
             "Order ID: #" + shortOrderId +
-            "\nItems : " + pendingItemNames +
-            "\nTotal : ₹" + pendingTotalPrice +
-            "\n\nPlease save this Order ID for reference.\n\n" +
-            "A WhatsApp message has opened — please tap Send to notify us!"
+            "\nPayment: " + (pendingOrderData.paymentMethod === "COD" ? "Cash on Delivery" : "UPI") +
+            "\nTotal: ₹" + pendingOrderData.totalAmount +
+            "\n\nPlease save this Order ID for reference."
         );
 
         cart = [];
@@ -765,12 +851,14 @@ document.getElementById("paidBtn").addEventListener("click", async () => {
         console.error(error);
     } finally {
         clearInterval(timerInterval);
-        loadingText.style.display = "none";
-        paidBtn.disabled = false;
-        paidBtn.innerText = "✅ I Have Paid";
+        if (loadingText) loadingText.style.display = "none";
+        if (paidBtn) {
+            paidBtn.disabled = false;
+            paidBtn.innerText = "✅ I Have Paid";
+        }
     }
 
-});
+}
 
 // ==========================
 // PWA - INSTALL APP
