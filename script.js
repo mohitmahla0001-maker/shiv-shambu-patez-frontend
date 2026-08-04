@@ -662,39 +662,47 @@ if (paymentMethod === "COD") {
     paymentPopup.style.display = "flex";
 
 });
-document.getElementById("useLocationBtn").addEventListener("click", () => {
+const useLocationBtn = document.getElementById("useLocationBtn");
 
-    if (!navigator.geolocation) {
-        alert("Geolocation is not supported in your browser");
-        return;
-    }
+if (useLocationBtn) {
+    useLocationBtn.addEventListener("click", () => {
 
-    const btn = document.getElementById("useLocationBtn");
-    btn.innerText = "📍 Fetching location...";
-
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-
-        const { latitude, longitude } = pos.coords;
-
-        try {
-
-            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-            const data = await response.json();
-
-            document.getElementById("customerAddress").value = data.display_name || `Lat: ${latitude}, Lng: ${longitude}`;
-
-        } catch (error) {
-            document.getElementById("customerAddress").value = `Lat: ${latitude}, Lng: ${longitude}`;
-        } finally {
-            btn.innerText = "📍 Use My Current Location";
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported in your browser");
+            return;
         }
 
-    }, () => {
-        alert("Could not get your location. Please enable location access in your browser and try again.");
-        btn.innerText = "📍 Use My Current Location";
-    });
+        useLocationBtn.innerText = "📍 Fetching location...";
 
-});
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+
+            const { latitude, longitude } = pos.coords;
+
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                const data = await response.json();
+
+                const addr = data.address || {};
+
+                document.getElementById("streetArea").value = addr.road || addr.suburb || "";
+                document.getElementById("city").value = addr.city || addr.town || addr.village || "";
+                document.getElementById("district").value = addr.state_district || addr.county || "";
+                document.getElementById("state").value = addr.state || "";
+                document.getElementById("pincode").value = addr.postcode || "";
+
+            } catch (error) {
+                alert("Could not fetch address details, please fill manually.");
+            } finally {
+                useLocationBtn.innerText = "📍 Use My Current Location";
+            }
+
+        }, () => {
+            alert("Could not get your location. Please enable location access and try again.");
+            useLocationBtn.innerText = "📍 Use My Current Location";
+        });
+
+    });
+}
 
 // ==========================
 // CLOSE POPUPS (no order placed on close)

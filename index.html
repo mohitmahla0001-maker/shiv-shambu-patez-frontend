@@ -419,14 +419,35 @@ Made with ❤️
 id="customerEmail"
 placeholder="Email Address"
 required>
+
+            <textarea
+            <input type="text"
+id="houseNo"
+placeholder="House / Flat / Building No."
+required>
+
+<input type="text"
+id="streetArea"
+placeholder="Street / Road / Locality"
+required>
+
+<input type="text"
+id="landmark"
+placeholder="Landmark (optional)">
+
+<div class="address-row">
+    <input type="text" id="city" placeholder="City" required>
+    <input type="text" id="pincode" placeholder="PIN Code" maxlength="6" required>
+</div>
+
+<div class="address-row">
+    <input type="text" id="district" placeholder="District" required>
+    <input type="text" id="state" placeholder="State" required>
+</div>
+
 <button type="button" id="useLocationBtn" style="width:100%; margin-bottom:10px; background:transparent; border:1px solid var(--accent); color:var(--accent); padding:10px; border-radius:4px; cursor:pointer; font-size:12px;">
     📍 Use My Current Location
-</button>
-            <textarea
-            id="customerAddress"
-            placeholder="Full Address"
-            rows="4"
-            required></textarea>
+</button></textarea>
             <div class="payment-method-select">
     <label>
         <input type="radio" name="paymentMethod" value="UPI" checked> 💳 Pay Online (UPI)
