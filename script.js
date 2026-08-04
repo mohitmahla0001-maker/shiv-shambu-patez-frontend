@@ -616,7 +616,15 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
     let name = document.getElementById("customerName").value;
     let phone = document.getElementById("customerPhone").value;
     let email = document.getElementById("customerEmail").value;
-    let address = document.getElementById("customerAddress").value;
+    let houseNo = document.getElementById("houseNo").value;
+let streetArea = document.getElementById("streetArea").value;
+let landmark = document.getElementById("landmark").value;
+let city = document.getElementById("city").value;
+let pincode = document.getElementById("pincode").value;
+let district = document.getElementById("district").value;
+let state = document.getElementById("state").value;
+
+let address = `${houseNo}, ${streetArea}${landmark ? ", Landmark: " + landmark : ""}, ${city}, ${district}, ${state} - ${pincode}`;
 
     if (phone.length != 10) {
         alert("Enter Valid Mobile Number");

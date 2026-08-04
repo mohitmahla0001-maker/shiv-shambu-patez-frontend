@@ -899,3 +899,13 @@ footer p {
     color: var(--text);
     cursor: pointer;
 }
+.address-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.address-row input {
+    flex: 1;
+    margin-bottom: 0;
+}
