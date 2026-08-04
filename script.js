@@ -584,12 +584,8 @@ function openCustomerPopupWithUser(user) {
     document.getElementById("customerName").value = user.name;
     document.getElementById("customerPhone").value = user.phone;
     document.getElementById("customerEmail").value = user.email;
-    if (user.address) {
-        document.getElementById("customerAddress").value = user.address;
-    }
     popup.style.display = "flex";
 }
-
 document.querySelector(".checkout").addEventListener("click", () => {
 
     if (cart.length === 0) {
