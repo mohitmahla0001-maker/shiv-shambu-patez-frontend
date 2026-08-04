@@ -1,4 +1,4 @@
-const CACHE_NAME = "patez-cache-v2";
+const CACHE_NAME = "patez-cache-v3";
 
 const CORE_ASSETS = [
     "./",
