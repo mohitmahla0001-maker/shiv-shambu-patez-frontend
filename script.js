@@ -654,11 +654,9 @@ if (paymentMethod === "COD") {
 
     document.getElementById("payAmountText").innerText = "Amount to Pay: ₹" + totalPrice;
 
-    paymentPopup.style.display = "flex";
+    window.location.href = upiLink;
 
-    setTimeout(() => {
-        window.location.href = upiLink;
-    }, 300);
+    paymentPopup.style.display = "flex";
 
 }
 
