@@ -649,14 +649,17 @@ popup.style.display = "none";
 if (paymentMethod === "COD") {
     placeOrder(false);
 } else {
-    const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv Shambu Patez&am=${totalPrice}&cu=INR&tn=Order Payment`;
+
+    const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv%20Shambu%20Patez&am=${totalPrice}&cu=INR&tn=Order%20Payment`;
 
     document.getElementById("payAmountText").innerText = "Amount to Pay: ₹" + totalPrice;
 
     paymentPopup.style.display = "flex";
 
-    // Turant UPI app list khol
-    window.location.href = upiLink;
+    setTimeout(() => {
+        window.location.href = upiLink;
+    }, 300);
+
 }
 
     const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv Shambu Patez&am=${totalPrice}&cu=INR`;
