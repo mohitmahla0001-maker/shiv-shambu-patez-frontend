@@ -657,14 +657,34 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
 
         document.getElementById("retryUpiBtn").dataset.upiLink = upiLink;
 
-        window.location.href = upiLink;
-
         paymentPopup.style.display = "flex";
+
+        openUpiApp(upiLink);
 
     }
 
 });
 
+// UPI app ko reliably open karta hai — <a> tag click ka use karta hai
+// jo window.location.href se zyada fast/consistent hai mobile browsers pe
+function openUpiApp(upiLink) {
+
+    const link = document.createElement("a");
+    link.href = upiLink;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+}
+
+// "Open UPI App Again" button ko wire karo (pehle kaam hi nahi kar raha tha)
+document.getElementById("retryUpiBtn").addEventListener("click", function () {
+    const upiLink = this.dataset.upiLink;
+    if (upiLink) {
+        openUpiApp(upiLink);
+    }
+});
 const useLocationBtn = document.getElementById("useLocationBtn");
 
 if (useLocationBtn) {
