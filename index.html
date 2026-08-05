@@ -476,9 +476,18 @@ Made with ❤️
 
         <p id="payAmountText" style="font-size: 18px; font-weight: bold; margin: 15px 0;"></p>
 
+        <div id="upiLoadingBox" style="margin: 20px 0;">
+            <div class="upi-spinner"></div>
+            <p style="font-size: 14px; margin-top: 10px;">Opening your UPI app...</p>
+        </div>
+
         <p style="font-size: 13px; opacity: 0.8; margin-bottom: 20px;">
-            Your UPI app should have opened automatically. Complete the payment there, then come back and tap below.
+            If your UPI app didn't open automatically, tap below to try again.
         </p>
+
+        <button id="retryUpiBtn" type="button" style="width:100%; margin-bottom:15px; background:transparent; border:1px solid var(--accent); color:var(--accent); padding:12px; border-radius:6px; font-size:13px; cursor:pointer;">
+            🔄 Open UPI App Again
+        </button>
 
         <button id="paidBtn" type="button" style="margin-top: 15px;">
             ✅ I Have Paid

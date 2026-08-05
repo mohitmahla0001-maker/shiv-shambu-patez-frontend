@@ -654,6 +654,8 @@ if (paymentMethod === "COD") {
 
     document.getElementById("payAmountText").innerText = "Amount to Pay: ₹" + totalPrice;
 
+    document.getElementById("retryUpiBtn").dataset.upiLink = upiLink;
+
     window.location.href = upiLink;
 
     paymentPopup.style.display = "flex";
@@ -726,6 +728,12 @@ document.getElementById("cancelPayBtn").addEventListener("click", () => {
 document.getElementById("openUpiAppBtn").addEventListener("click", () => {
     const upiLink = document.getElementById("openUpiAppBtn").dataset.upiLink;
     window.location.href = upiLink;
+});
+document.getElementById("retryUpiBtn").addEventListener("click", () => {
+    const upiLink = document.getElementById("retryUpiBtn").dataset.upiLink;
+    if (upiLink) {
+        window.location.href = upiLink;
+    }
 });
 
 // ==========================
