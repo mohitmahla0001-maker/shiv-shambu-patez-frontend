@@ -613,14 +613,14 @@ document.getElementById("customerForm").addEventListener("submit", (e) => {
     let phone = document.getElementById("customerPhone").value;
     let email = document.getElementById("customerEmail").value;
     let houseNo = document.getElementById("houseNo").value;
-let streetArea = document.getElementById("streetArea").value;
-let landmark = document.getElementById("landmark").value;
-let city = document.getElementById("city").value;
-let pincode = document.getElementById("pincode").value;
-let district = document.getElementById("district").value;
-let state = document.getElementById("state").value;
+    let streetArea = document.getElementById("streetArea").value;
+    let landmark = document.getElementById("landmark").value;
+    let city = document.getElementById("city").value;
+    let pincode = document.getElementById("pincode").value;
+    let district = document.getElementById("district").value;
+    let state = document.getElementById("state").value;
 
-let address = `${houseNo}, ${streetArea}${landmark ? ", Landmark: " + landmark : ""}, ${city}, ${district}, ${state} - ${pincode}`;
+    let address = `${houseNo}, ${streetArea}${landmark ? ", Landmark: " + landmark : ""}, ${city}, ${district}, ${state} - ${pincode}`;
 
     if (phone.length != 10) {
         alert("Enter Valid Mobile Number");
@@ -631,47 +631,40 @@ let address = `${houseNo}, ${streetArea}${landmark ? ", Landmark: " + landmark :
     let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
 
-pendingOrderData = {
-    customerName: name,
-    phone: phone,
-    email: email,
-    address: address,
-    paymentMethod: paymentMethod,
-    items: cart.map(item => ({
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price
-    })),
-    totalAmount: totalPrice
-};
-popup.style.display = "none";
-
-if (paymentMethod === "COD") {
-    placeOrder(false);
-} else {
-
-    const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv%20Shambu%20Patez&am=${totalPrice}&cu=INR&tn=Order%20Payment`;
-
-    document.getElementById("payAmountText").innerText = "Amount to Pay: ₹" + totalPrice;
-
-    document.getElementById("retryUpiBtn").dataset.upiLink = upiLink;
-
-    window.location.href = upiLink;
-
-    paymentPopup.style.display = "flex";
-
-}
-
-    const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv Shambu Patez&am=${totalPrice}&cu=INR`;
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
-
-    document.getElementById("qrCodeImg").src = qrUrl;
-    document.getElementById("payAmountText").innerText = "Amount to Pay: ₹" + totalPrice;
+    pendingOrderData = {
+        customerName: name,
+        phone: phone,
+        email: email,
+        address: address,
+        paymentMethod: paymentMethod,
+        items: cart.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+        })),
+        totalAmount: totalPrice
+    };
 
     popup.style.display = "none";
-    paymentPopup.style.display = "flex";
+
+    if (paymentMethod === "COD") {
+        placeOrder(false);
+    } else {
+
+        const upiLink = `upi://pay?pa=${UPI_ID}&pn=Shiv%20Shambu%20Patez&am=${totalPrice}&cu=INR&tn=Order%20Payment`;
+
+        document.getElementById("payAmountText").innerText = "Amount to Pay: ₹" + totalPrice;
+
+        document.getElementById("retryUpiBtn").dataset.upiLink = upiLink;
+
+        window.location.href = upiLink;
+
+        paymentPopup.style.display = "flex";
+
+    }
 
 });
+
 const useLocationBtn = document.getElementById("useLocationBtn");
 
 if (useLocationBtn) {
@@ -713,29 +706,6 @@ if (useLocationBtn) {
 
     });
 }
-
-// ==========================
-// CLOSE POPUPS (no order placed on close)
-// ==========================
-
-document.getElementById("closeCustomerPopup").addEventListener("click", () => {
-    popup.style.display = "none";
-});
-
-document.getElementById("cancelPayBtn").addEventListener("click", () => {
-    paymentPopup.style.display = "none";
-});
-document.getElementById("openUpiAppBtn").addEventListener("click", () => {
-    const upiLink = document.getElementById("openUpiAppBtn").dataset.upiLink;
-    window.location.href = upiLink;
-});
-document.getElementById("retryUpiBtn").addEventListener("click", () => {
-    const upiLink = document.getElementById("retryUpiBtn").dataset.upiLink;
-    if (upiLink) {
-        window.location.href = upiLink;
-    }
-});
-
 // ==========================
 // LOADING UI
 // ==========================
