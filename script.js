@@ -738,6 +738,7 @@ if (useLocationBtn) {
             margin-top: 15px;
             text-align: center;
         }
+
         #loadingText .spinner {
             width: 34px;
             height: 34px;
