@@ -507,4 +507,270 @@ header {
 .customer-box textarea {
     border-radius: 12px;
     box-shadow: var(--inset-press);
+}/* ==========================================================================
+   SHIV SHAMBU PATEZ - GOLD & CREAM LUXURY (FIXED LAYOUT)
+========================================================================== */
+:root {
+  --primary: #c2410c; 
+  --primary-hover: #9a3412;
+  --accent-gold: #d97706; 
+  --gold-glow: rgba(217, 119, 6, 0.35);
+  --bg-cream: #fdfbf7; 
+  --card-bg: #ffffff;
+  --text-dark: #1c1917;
+  --text-sub: #57534e;
+  --border-gold: rgba(217, 119, 6, 0.25);
+
+  /* Soft 3D Elevation Shadows */
+  --shadow-3d: 0 12px 28px rgba(120, 53, 15, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 20px 35px rgba(194, 65, 12, 0.18), 0 8px 15px rgba(217, 119, 6, 0.15);
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-cream);
+  color: var(--text-dark);
+  min-height: 100vh;
+}
+
+/* ================== NAVBAR ================== */
+header {
+  position: sticky;
+  top: 15px;
+  z-index: 1000;
+  padding: 0 5%;
+}
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border-gold);
+  border-radius: 50px;
+  box-shadow: var(--shadow-3d);
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  text-transform: uppercase;
+}
+
+.navbar .logo i { color: var(--accent-gold); font-size: 1.8rem; }
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: var(--text-sub);
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.navbar ul li a:hover { color: var(--primary); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nav-right button, .login-btn, .cart-btn {
+  background: #ffffff;
+  border: 1px solid var(--border-gold);
+  color: var(--text-dark);
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  box-shadow: var(--shadow-3d);
+  transition: 0.3s;
+}
+
+.nav-right button:hover, .login-btn:hover, .cart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-gold);
+}
+
+#cart-count {
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 50%;
+}
+
+/* ================== FIXED MODALS / POPUPS ================== */
+.customer-popup, .payment-popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none; /* Hides it from clicks when not active */
+  transition: opacity 0.3s ease;
+  z-index: 2000;
+}
+
+/* Shows the modal when active */
+.customer-popup.active, .payment-popup.active,
+.customer-popup[style*="display: block"] {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.customer-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border-gold);
+  width: 90%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 24px;
+  box-shadow: var(--shadow-3d);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.customer-popup.active .customer-box { transform: scale(1); }
+
+.customer-box h2, .customer-box h3 {
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  text-align: center;
+  font-family: 'Fraunces', serif;
+}
+
+.customer-box input, .customer-box select {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  background: var(--bg-cream);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  color: var(--text-dark);
+  outline: none;
+  transition: 0.3s;
+}
+
+.customer-box input:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 8px var(--gold-glow);
+}
+
+.customer-box button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(145deg, #d97706, #c2410c);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px var(--gold-glow);
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.customer-box button:hover {
+  background: linear-gradient(145deg, #b45309, #9a3412);
+  transform: translateY(-2px);
+}
+
+.popup-close {
+  position: absolute;
+  top: 15px; right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-sub);
+}
+
+/* ================== MENU & CARDS ================== */
+#menu { padding: 20px 8% 80px; }
+.title {
+  text-align: center; font-family: 'Fraunces', serif;
+  font-size: 2.8rem; margin-bottom: 50px; color: var(--text-dark);
+}
+
+.food-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 35px;
+}
+
+.food-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-gold);
+  border-radius: 24px; padding: 22px; text-align: center;
+  box-shadow: var(--shadow-3d); transition: 0.3s;
+}
+
+.food-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-gold);
+}
+
+.food-card img {
+  width: 100%; height: 170px; object-fit: cover;
+  border-radius: 18px; box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  margin-bottom: 18px;
+}
+
+.food-card h3 { font-size: 1.3rem; color: var(--text-dark); margin-bottom: 6px; }
+.food-card p { color: var(--text-sub); font-size: 0.9rem; margin-bottom: 12px; }
+.food-card h4 { font-size: 1.4rem; color: var(--primary); margin-bottom: 18px; font-weight: 700; }
+
+.food-card button {
+  width: 100%; padding: 12px; border: none;
+  background: linear-gradient(145deg, #d97706, #c2410c);
+  color: #fff; font-weight: 600; border-radius: 14px;
+  cursor: pointer; box-shadow: 0 4px 12px var(--gold-glow); transition: 0.2s;
+}
+
+.food-card button:hover {
+  background: linear-gradient(145deg, #b45309, #9a3412);
+  transform: translateY(-2px);
+}
+
+/* ================== FOOTER ================== */
+footer {
+  text-align: center; padding: 45px 20px;
+  background: #f3ece1; border-top: 1px solid var(--border-gold);
+  margin-top: 80px;
+}
+
+footer .social { display: flex; justify-content: center; gap: 22px; margin-top: 18px; font-size: 1.3rem; }
+footer .social i { cursor: pointer; color: var(--text-sub); transition: 0.3s; }
+footer .social i:hover { color: var(--primary); }
