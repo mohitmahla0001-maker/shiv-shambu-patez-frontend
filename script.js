@@ -531,33 +531,7 @@ function decreaseItem(index){
         cart.splice(index,1);
 
     }
-    // ==========================
-// CART DRAWER TOGGLE
-// ==========================
-
-const cartBtn = document.querySelector(".cart-btn");
-const cartPanel = document.querySelector(".cart");
-
-// backdrop banate hain jo cart khulne pe peeche dim ho
-const cartBackdrop = document.createElement("div");
-cartBackdrop.className = "cart-backdrop";
-document.body.appendChild(cartBackdrop);
-
-function openCart() {
-    cartPanel.classList.add("active");
-    cartBackdrop.classList.add("active");
-}
-
-function closeCart() {
-    cartPanel.classList.remove("active");
-    cartBackdrop.classList.remove("active");
-}
-
-cartBtn.addEventListener("click", () => {
-    cartPanel.classList.contains("active") ? closeCart() : openCart();
-});
-
-cartBackdrop.addEventListener("click", closeCart);
+    
 
     updateCart();
 
@@ -937,6 +911,33 @@ window.addEventListener("beforeinstallprompt", (e) => {
         deferredInstallPrompt = null;
     });
 });
+// ==========================
+// CART DRAWER TOGGLE
+// ==========================
+
+const cartBtn = document.querySelector(".cart-btn");
+const cartPanel = document.querySelector(".cart");
+
+// backdrop banate hain jo cart khulne pe peeche dim ho
+const cartBackdrop = document.createElement("div");
+cartBackdrop.className = "cart-backdrop";
+document.body.appendChild(cartBackdrop);
+
+function openCart() {
+    cartPanel.classList.add("active");
+    cartBackdrop.classList.add("active");
+}
+
+function closeCart() {
+    cartPanel.classList.remove("active");
+    cartBackdrop.classList.remove("active");
+}
+
+cartBtn.addEventListener("click", () => {
+    cartPanel.classList.contains("active") ? closeCart() : openCart();
+});
+
+cartBackdrop.addEventListener("click", closeCart);
 
 // ==========================
 // START
