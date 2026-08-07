@@ -574,6 +574,9 @@ searchInput.addEventListener("keyup", function(){
 // ==========================
 
 const popup = document.getElementById("customerPopup");
+document.getElementById("closeCustomerPopup").addEventListener("click", () => {
+    popup.style.display = "none";
+});
 const paymentPopup = document.getElementById("paymentPopup");
 const UPI_ID = "7056468607@fam";
 
