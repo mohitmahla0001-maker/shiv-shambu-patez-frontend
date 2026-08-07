@@ -226,17 +226,26 @@ header{ position:sticky; top:0; z-index:200; padding:14px 4vw; }
 .card-btn-container button:hover{ transform:translateY(-3px); filter:brightness(1.05); }
 .card-btn-container button:active{ transform:translateY(0); box-shadow:var(--shadow-press); }
 
-/* =========================== CART (static in-page glass panel) =========================== */
+/* =========================== CART (slide-in drawer, toggled by cart-btn) =========================== */
 .cart{
-  width:min(480px, 92vw); margin:2vh auto 8vh; padding:30px 28px;
-  display:flex; flex-direction:column;
-  border-radius:var(--radius-lg);
-  background:var(--glass-strong); border:1px solid var(--glass-border);
-  backdrop-filter:blur(24px) saturate(160%); -webkit-backdrop-filter:blur(24px) saturate(160%);
-  box-shadow:var(--shadow-lift);
+  position:fixed; top:0; right:-420px; width:min(400px, 92vw); height:100vh; z-index:400;
+  padding:100px 26px 26px; display:flex; flex-direction:column;
+  border-radius:0;
+  background:var(--glass-strong); border-left:1px solid var(--glass-border);
+  backdrop-filter:blur(26px) saturate(160%); -webkit-backdrop-filter:blur(26px) saturate(160%);
+  box-shadow:-24px 0 60px -20px rgba(90,50,20,.35);
+  transition:right .4s var(--ease);
 }
+.cart.active{ right:0; }
+.cart-backdrop{
+  position:fixed; inset:0; z-index:399;
+  background:rgba(90,50,20,.28);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s var(--ease);
+}
+.cart-backdrop.active{ opacity:1; pointer-events:auto; }
 .cart h2{ font-size:1.3rem; margin-bottom:18px; }
-#cart-items{ display:flex; flex-direction:column; gap:12px; max-height:340px; overflow-y:auto; }
+#cart-items{ flex:1; display:flex; flex-direction:column; gap:12px; overflow-y:auto; }
 #cart-items p{ color:var(--muted); text-align:center; padding:20px 0; }
 
 .cart-item{
