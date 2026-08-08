@@ -43,13 +43,12 @@ function updateAuthUI() {
         });
 
         document.getElementById("myOrdersLink").addEventListener("click", () => {
-    document.getElementById("myOrdersPopup").style.display = "flex";
-    loadMyOrders();
+            document.getElementById("myOrdersPopup").style.display = "flex";
+            loadMyOrders();
 
-    // popup khula rehte hi har 10 second mein status khud check karta rahega
-    clearInterval(myOrdersRefreshInterval);
-    myOrdersRefreshInterval = setInterval(loadMyOrders, 10000);
-});
+            clearInterval(myOrdersRefreshInterval);
+            myOrdersRefreshInterval = setInterval(loadMyOrders, 10000);
+        });
 
     } else {
         authSection.innerHTML = `
@@ -313,7 +312,7 @@ async function loadMyOrders() {
 
             const shortId = order._id.slice(-6).toUpperCase();
             const itemsText = order.items.map(i => `${i.name} x${i.quantity}`).join(", ");
-           const canCancel = order.status === "pending" || order.status === "Preparing";
+            const canCancel = order.status === "pending" || order.status === "Preparing";
 
             return `
                 <div class="order-card">
@@ -379,7 +378,6 @@ document.getElementById("closeMyOrdersPopup").addEventListener("click", () => {
     document.getElementById("myOrdersPopup").style.display = "none";
     clearInterval(myOrdersRefreshInterval);
 });
-// Auto-refresh My Orders popup every 10 seconds while it's 
 
 // ==========================
 // ADD TO CART
@@ -467,8 +465,8 @@ function updateCart() {
     cartCount.innerText = count;
     updateCardButtons();
 
-
 }
+
 function updateCardButtons() {
 
     document.querySelectorAll(".food-card").forEach(card => {
@@ -531,7 +529,6 @@ function decreaseItem(index){
         cart.splice(index,1);
 
     }
-    
 
     updateCart();
 
@@ -574,9 +571,11 @@ searchInput.addEventListener("keyup", function(){
 // ==========================
 
 const popup = document.getElementById("customerPopup");
+
 document.getElementById("closeCustomerPopup").addEventListener("click", () => {
     popup.style.display = "none";
 });
+
 const paymentPopup = document.getElementById("paymentPopup");
 const UPI_ID = "9992844813@pthdfc";
 
@@ -590,6 +589,7 @@ function openCustomerPopupWithUser(user) {
     document.getElementById("customerEmail").value = user.email;
     popup.style.display = "flex";
 }
+
 document.querySelector(".checkout").addEventListener("click", () => {
 
     if (cart.length === 0) {
@@ -682,13 +682,14 @@ function openUpiApp(upiLink) {
 
 }
 
-// "Open UPI App Again" button ko wire karo (pehle kaam hi nahi kar raha tha)
+// "Open UPI App Again" button ko wire karo
 document.getElementById("retryUpiBtn").addEventListener("click", function () {
     const upiLink = this.dataset.upiLink;
     if (upiLink) {
         openUpiApp(upiLink);
     }
 });
+
 const useLocationBtn = document.getElementById("useLocationBtn");
 
 if (useLocationBtn) {
@@ -730,6 +731,7 @@ if (useLocationBtn) {
 
     });
 }
+
 // ==========================
 // LOADING UI
 // ==========================
@@ -914,6 +916,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
         deferredInstallPrompt = null;
     });
 });
+
 // ==========================
 // CART DRAWER TOGGLE
 // ==========================
@@ -921,7 +924,6 @@ window.addEventListener("beforeinstallprompt", (e) => {
 const cartBtn = document.querySelector(".cart-btn");
 const cartPanel = document.querySelector(".cart");
 
-// backdrop banate hain jo cart khulne pe peeche dim ho
 const cartBackdrop = document.createElement("div");
 cartBackdrop.className = "cart-backdrop";
 document.body.appendChild(cartBackdrop);
@@ -943,44 +945,28 @@ cartBtn.addEventListener("click", () => {
 cartBackdrop.addEventListener("click", closeCart);
 
 // ==========================
+// NAVBAR AUTO-HIDE ON SCROLL
+// ==========================
+
+let lastScrollY = window.scrollY;
+const siteHeader = document.querySelector("header");
+
+window.addEventListener("scroll", () => {
+
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        siteHeader.classList.add("hide-on-scroll");
+    } else {
+        siteHeader.classList.remove("hide-on-scroll");
+    }
+
+    lastScrollY = currentScrollY;
+
+});
+
+// ==========================
 // START
 // ==========================
-// Scroll neeche karte hi navbar chhup jaye, upar karte hi wapas dikhe
-let lastScrollY = window.scrollY;
-const siteHeader = document.querySelector("header");
 
-window.addEventListener("scroll", () => {
-
-    const currentScrollY = window.scrollY;
-
-    if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        // neeche scroll ho raha hai — navbar chhupao
-        siteHeader.classList.add("hide-on-scroll");
-    } else {
-        // upar scroll ho raha hai — navbar dikhao
-        siteHeader.classList.remove("hide-on-scroll");
-    }
-
-    lastScrollY = currentScrollY;
-
-});
-// Scroll neeche karte hi navbar chhup jaye, upar karte hi wapas dikhe
-let lastScrollY = window.scrollY;
-const siteHeader = document.querySelector("header");
-
-window.addEventListener("scroll", () => {
-
-    const currentScrollY = window.scrollY;
-
-    if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        // neeche scroll ho raha hai — navbar chhupao
-        siteHeader.classList.add("hide-on-scroll");
-    } else {
-        // upar scroll ho raha hai — navbar dikhao
-        siteHeader.classList.remove("hide-on-scroll");
-    }
-
-    lastScrollY = currentScrollY;
-
-});
 updateCart();
