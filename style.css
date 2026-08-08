@@ -457,3 +457,16 @@ footer p{ color:var(--muted); font-size:.9rem; }
   .navbar{ padding:10px 14px; }
   .logo span{ display:none; }
 }
+header{
+    transition: transform 0.3s ease;
+}
+
+header.hide-on-scroll{
+    transform: translateY(-100%);
+}header{
+    transition: transform 0.3s ease;
+}
+
+header.hide-on-scroll{
+    transform: translateY(-100%);
+}

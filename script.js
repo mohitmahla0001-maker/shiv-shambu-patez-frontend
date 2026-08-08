@@ -966,3 +966,22 @@ window.addEventListener("scroll", () => {
     lastScrollY = currentScrollY;
 
 });
+// Scroll neeche karte hi navbar chhup jaye, upar karte hi wapas dikhe
+let lastScrollY = window.scrollY;
+const siteHeader = document.querySelector("header");
+
+window.addEventListener("scroll", () => {
+
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        // neeche scroll ho raha hai — navbar chhupao
+        siteHeader.classList.add("hide-on-scroll");
+    } else {
+        // upar scroll ho raha hai — navbar dikhao
+        siteHeader.classList.remove("hide-on-scroll");
+    }
+
+    lastScrollY = currentScrollY;
+
+});
