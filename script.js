@@ -947,3 +947,7 @@ cartBackdrop.addEventListener("click", closeCart);
 // ==========================
 
 updateCart();
+// Mobile hamburger menu toggle
+document.getElementById("navToggle").addEventListener("click", () => {
+    document.getElementById("navLinks").classList.toggle("open");
+});
