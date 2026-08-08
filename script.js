@@ -947,7 +947,22 @@ cartBackdrop.addEventListener("click", closeCart);
 // ==========================
 
 updateCart();
-// Mobile hamburger menu toggle
-document.getElementById("navToggle").addEventListener("click", () => {
-    document.getElementById("navLinks").classList.toggle("open");
+// Scroll neeche karte hi navbar chhup jaye, upar karte hi wapas dikhe
+let lastScrollY = window.scrollY;
+const siteHeader = document.querySelector("header");
+
+window.addEventListener("scroll", () => {
+
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        // neeche scroll ho raha hai — navbar chhupao
+        siteHeader.classList.add("hide-on-scroll");
+    } else {
+        // upar scroll ho raha hai — navbar dikhao
+        siteHeader.classList.remove("hide-on-scroll");
+    }
+
+    lastScrollY = currentScrollY;
+
 });
